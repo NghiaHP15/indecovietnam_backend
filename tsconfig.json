@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                     // hoặc "ES2020"
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,     // ✅ bắt buộc
+    "emitDecoratorMetadata": true,      // ✅ bắt buộc
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
