@@ -1,5 +1,11 @@
-import { AppDataSource } from "./database/data-source";
+import cors from "cors";
 import app from "./app";
+import { AppDataSource } from "./database/data-source";
+
+app.use(cors({
+  origin: "http://localhost:3000", // hoặc domain thực tế của bạn
+  credentials: true,               // cho phép cookie / auth header
+}));
 
 const PORT = process.env.PORT || 3001;
 
