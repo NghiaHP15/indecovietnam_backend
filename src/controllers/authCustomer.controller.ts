@@ -8,7 +8,7 @@ export const register = async (req: Request, res: Response) => {
     const dto: RegisterCustomerDto = req.body;
     dto.userAgent = req.headers["user-agent"] || "";
     const result = await authService.register(dto);
-    const { refreshToken, accessToken, ...user} = result;
+    const { refreshToken, accessToken, user} = result;
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,
@@ -26,7 +26,7 @@ export const login = async (req: Request, res: Response) => {
     const dto: LoginCustomerDto = req.body;
     dto.userAgent = req.headers["user-agent"] || "";
     const result = await authService.login(dto);
-    const { refreshToken, accessToken, ...user} = result;
+    const { refreshToken, accessToken, user} = result;
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,
@@ -44,7 +44,7 @@ export const loginWithSocial = async (req: Request, res: Response) => {
     const dto: SocialLoginCustomerDto = req.body;
     dto.userAgent = req.headers["user-agent"] || "";
     const result = await authService.socialLogin(dto);
-    const { refreshToken, accessToken, ...user} = result;
+    const { refreshToken, accessToken, user} = result;
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,
@@ -61,7 +61,7 @@ export const refresh = async (req: Request, res: Response) => {
   const token = req.cookies.refreshToken;
   try {
     const result = await authService.refreshAccessToken(token);
-    const { refreshToken, accessToken, ...user} = result;
+    const { refreshToken, accessToken, user} = result;
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,
