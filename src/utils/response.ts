@@ -22,11 +22,17 @@ export const singleResponse = (res: any, message: string, data: any) => {
 
 export const errorResponse = (
     res: any,
-    error: unknown,
-    statusCode = 500
+    error: any,
+    defaultStatusCode = 400
 ) => {
-    return res.status(statusCode).json({
+    return res.status(error.statusCode || defaultStatusCode).json({
         success: false,
         message: (error as Error).message || "Internal Server Error",
     });
+}
+
+export function createError(message: string, statusCode = 400) {
+  const error = new Error(message) as any;
+  error.statusCode = statusCode;
+  return error;
 }

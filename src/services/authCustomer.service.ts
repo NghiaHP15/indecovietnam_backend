@@ -5,10 +5,11 @@ import { Provider } from "../utils/enum";
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt";
 import bcrypt from "bcryptjs";
 import { refreshTokenRepo } from "../repositories/refreshToken.repository";
+import { createError } from '../utils/response';
 
 export const register = async (dto: RegisterCustomerDto) => {
     const exists = await customerRepo.findOneBy({ email: dto.email });
-    if(exists) throw new Error('Email already exists');
+    if(exists) throw createError("Email already exists", 401);
     const password_hash = await bcrypt.hash(dto.password, 10);
     const customer = customerRepo.create({
         ...dto, 
@@ -31,9 +32,9 @@ export const register = async (dto: RegisterCustomerDto) => {
 
 export const login = async (dto: LoginCustomerDto) => {
     const customer = await customerRepo.findOneBy({ email: dto.email });
-    if(!customer) throw new Error('Invalid email or password');
+    if(!customer) throw createError("Invalid email", 401);
     const isValid = await bcrypt.compare(dto.password, customer.password_hash || "");
-    if(!isValid) throw new Error('Invalid email or password');
+    if(!isValid) throw createError("Invalid passoword", 401);
     const tokens = generateTokens(customer);
     const refreshToken = refreshTokenRepo.create({
         ip: dto.ip,
@@ -72,17 +73,17 @@ export const socialLogin = async (dto: SocialLoginCustomerDto) => {
 
 export const logout = async (refreshToken: string) => {
     const existing = await refreshTokenRepo.findOne({ where: { token: refreshToken }, relations: ["customer"] });
-    if(!existing) throw new Error('Invalid refresh token');
+    if(!existing) throw createError('Invalid refresh token', 401);
     await refreshTokenRepo.delete({ id: existing.id });
 }
 
 export const refreshAccessToken = async (token: string) => {
     const existing = await refreshTokenRepo.findOne({ where: { token }, relations: ["customer"] });
-    if(!existing) throw new Error('Invalid refresh token');
+    if(!existing) throw createError('Invalid refresh token', 401);
     const isExpired = existing.expiresAt.getTime() < Date.now();
     if (isExpired) {
         await refreshTokenRepo.delete({ id: existing.id });
-        throw new Error('Refresh token expired');
+        throw createError('Refresh token expired', 401);
     }
     const tokens = generateTokens(existing.customer);
     existing.token = tokens.refreshToken;
