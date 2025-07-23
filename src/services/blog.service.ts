@@ -10,7 +10,7 @@ export const getAllBlogs = async (query: QueryBlogDto): Promise<ResponseBlogDto[
 
     const where = {
       ...(query.search ? { title: Like(`%${query.search}%`) } : {}),
-      ...(query.latest_blog ? { type: query.latest_blog } : {}),
+      ...(query.latest_blog ? { latest_blog: query.latest_blog } : {}),
     };
 
     const [blogs] = await blogRepo.findAndCount({ 
