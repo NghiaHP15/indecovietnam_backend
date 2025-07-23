@@ -2,6 +2,7 @@ import { toResponseGalleryDto } from "../automapper/gallery.mapper";
 import { CreateGalleryDto, QueryGalleryDto, ResponseGalleryDto, UpdateGalleryDto } from "../dto/gallery.dto";
 import { galleryRepo } from "../repositories/gallery.repository";
 import { Like } from "typeorm";
+import { TypeGallery } from "../utils/enum";
 
 
 
@@ -9,9 +10,12 @@ export const getAllGalleries = async (query: QueryGalleryDto): Promise<ResponseG
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
-    const where = query.search ? [
-        { title: Like(`%${query.search}%`) }
-    ] : {};
+    const where = query.search
+    ? [
+        { title: Like(`%${query.search}%`) },
+        { type: query.search as TypeGallery }, 
+      ]
+    : {};
     
     const [galleries] = await galleryRepo.findAndCount({ 
         where,
