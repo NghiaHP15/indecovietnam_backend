@@ -10,12 +10,10 @@ export const getAllGalleries = async (query: QueryGalleryDto): Promise<ResponseG
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
-    const where = query.search
-    ? [
-        { title: Like(`%${query.search}%`) },
-        { type: query.type}, 
-      ]
-    : {};
+    const where = {
+      ...(query.search ? { title: Like(`%${query.search}%`) } : {}),
+      ...(query.type ? { type: query.type } : {}),
+    };
     
     const [galleries] = await galleryRepo.findAndCount({ 
         where,
