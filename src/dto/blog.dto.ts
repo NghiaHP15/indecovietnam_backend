@@ -61,6 +61,7 @@ export interface QueryBlogDto {
   page?: number;
   limit?: number;
   search?: string;
+  latest_blog?: boolean;
   sortBy?: keyof Blog;
   order?: 'asc' | 'desc';
 }
