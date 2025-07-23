@@ -30,6 +30,7 @@ export interface QueryGalleryDto {
     page?: number;
     limit?: number;
     search?: string;
+    type?: TypeGallery;
     sortBy?: keyof Gallery;
     order?: 'asc' | 'desc';
 }

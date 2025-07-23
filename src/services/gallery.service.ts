@@ -13,7 +13,7 @@ export const getAllGalleries = async (query: QueryGalleryDto): Promise<ResponseG
     const where = query.search
     ? [
         { title: Like(`%${query.search}%`) },
-        { type: query.search as TypeGallery }, 
+        { type: query.type}, 
       ]
     : {};
     
