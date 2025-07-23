@@ -35,6 +35,14 @@ export const getBlogById = async (id: string): Promise<ResponseBlogDto | null> =
   return blogCategory ? toResponseBlogDto(blogCategory) : null;
 };
 
+export const getBlogBySlug = async (slug: string): Promise<ResponseBlogDto | null> => {
+  const blogCategory = await blogRepo.findOne({ 
+    where: { slug },
+    relations: ['category', 'author'],
+  });
+  return blogCategory ? toResponseBlogDto(blogCategory) : null;
+};
+
 export const CreateBlog = async (dto: CreateBlogDto): Promise<ResponseBlogDto> => {
   dto.slug = generateSlug(dto.title);
   const blog = blogRepo.create({ ...dto });

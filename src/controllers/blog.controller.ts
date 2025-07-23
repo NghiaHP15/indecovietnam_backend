@@ -22,6 +22,16 @@ export const getBlogById = async (req: Request, res: Response) => {
     }
 }
 
+export const getBlogBySlug = async (req: Request, res: Response) => {
+    const slug = req.params.slug;
+    try {
+        const result = await blogService.getBlogBySlug(slug);
+        singleResponse(res, "Blog found", result);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+}
+
 export const createBlog = async (req: Request, res: Response) => {
     try {
         const result = await blogService.CreateBlog(req.body);

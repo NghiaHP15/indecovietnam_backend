@@ -2,7 +2,6 @@ import { toResponseGalleryDto } from "../automapper/gallery.mapper";
 import { CreateGalleryDto, QueryGalleryDto, ResponseGalleryDto, UpdateGalleryDto } from "../dto/gallery.dto";
 import { galleryRepo } from "../repositories/gallery.repository";
 import { Like } from "typeorm";
-import { TypeGallery } from "../utils/enum";
 
 
 
