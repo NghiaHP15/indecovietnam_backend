@@ -18,6 +18,9 @@ export class ProductVariant {
 
     @Column({ type: 'varchar', length: 50 })
     size!: string;
+    
+    @Column({ type: 'varchar', length: 255,  nullable: true })
+    image?: string;
 
     @Column({ type: 'varchar', length: 255 })
     price!: string

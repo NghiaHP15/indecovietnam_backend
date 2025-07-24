@@ -7,6 +7,7 @@ export interface ProductVariantDto {
     size: string;
     price: string;
     discount: string;
+    image?:string;
     is_active: boolean;
     product?: {
         id: string;
@@ -20,6 +21,7 @@ export interface ResponseProductVariantDto {
     size: string;
     price: string;
     discount: string;
+    image?:string;
     is_active: boolean;
     product?: {
         id: string;
@@ -32,6 +34,7 @@ export interface CreateProductVariantDto {
     size: string;
     price: string;
     discount: string;
+    image?:string;
     is_active: boolean;
     product: { 
         id: string 
@@ -44,6 +47,7 @@ export interface UpdateProductVariantDto {
     size: string;
     price: string;
     discount: string;
+    image?:string;
     is_active: boolean;
     product: { 
         id: string 

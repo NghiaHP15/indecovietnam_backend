@@ -8,9 +8,11 @@ export const getAllProducts = async (query: QueryProductDto): Promise<ResponsePr
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
-    const where = query.search ? [
-        { name: Like(`%${query.search}%`) },
-    ] : {};
+    const where = {
+        ...(query.search ? { title: Like(`%${query.search}%`) } : {}),
+        ...(query.status ? { status: query.status } : {}),
+        ...(query.featured ? { featured: query.featured } : {}),
+    };
 
     const [products] = await productRepo.findAndCount({ 
         where,

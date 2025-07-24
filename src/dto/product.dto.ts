@@ -50,6 +50,8 @@ export interface QueryProductDto {
     page?: number;
     limit?: number;
     search?: string;
+    status?: StatusProduct;
+    featured?: boolean;
     sortBy?: keyof Product;
     order?: 'asc' | 'desc';
 }

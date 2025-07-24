@@ -6,6 +6,7 @@ export const toResponseProductVariantDto = (productVariant: ProductVariant): Res
     sku: productVariant.sku,
     color: productVariant.color,
     size: productVariant.size,
+    image: productVariant.image,
     price: productVariant.price,
     discount: productVariant.discount,
     is_active: productVariant.is_active,
