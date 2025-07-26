@@ -10,6 +10,8 @@ export interface ResponseProductDto {
     description?: string;
     status: StatusProduct;
     featured: boolean;
+    max_price: number;
+    min_price: number;
     body?: string;
     productCategory: {
         id: string;
@@ -51,6 +53,7 @@ export interface QueryProductDto {
     limit?: number;
     search?: string;
     status?: StatusProduct;
+    productCategory?: string;
     featured?: boolean;
     sortBy?: keyof Product;
     order?: 'asc' | 'desc';

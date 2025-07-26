@@ -14,6 +14,7 @@ export const getAllRoomCategories = async (query: QueryRoomCategoryDto): Promise
 
     const [roomCategories] = await roomCategoryRepo.findAndCount({ 
         where,
+        relations: ['productCategories'],
         order: {
             [query.sortBy || 'created_at']: query.order || 'desc',
         },

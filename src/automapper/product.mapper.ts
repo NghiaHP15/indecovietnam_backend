@@ -10,6 +10,8 @@ export const toResponseProductDto = (product: Product): ResponseProductDto => {
         description: product.description,
         status: product.status,
         featured: product.featured,
+        max_price: product.max_price,
+        min_price: product.min_price,
         body: product.body,
         productCategory: {
             id: product.productCategory.id,
@@ -24,9 +26,15 @@ export const toResponseProductDto = (product: Product): ResponseProductDto => {
         variants: product.variants.map(variant => ({
             id: variant.id,
             sku: variant.sku,
-            color: variant.color,
+            image: variant.image,
             size: variant.size,
             price: variant.price,
+            color: {
+                id: variant.color.id,
+                name: variant.color.name,
+                code: variant.color.code,
+            },
+            quatity: variant.quatity,
             discount: variant.discount,
             is_active: variant.is_active
         }))

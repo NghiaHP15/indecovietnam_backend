@@ -16,6 +16,7 @@ import galleryRouter from "./gallery.route";
 import settingRouter from "./siteSetting.route";
 import paymentMethodRouter from "./paymentmethod.route";
 import orderRouter from "./order.route";
+import colorRouter from "./color.route";
 
 const routes = (app: Application): void => {
     app.use("/api/customer", customerRouter);
@@ -34,6 +35,7 @@ const routes = (app: Application): void => {
     app.use("/api/setting", settingRouter);
     app.use("/api/payment-method", paymentMethodRouter);
     app.use("/api/order", orderRouter);
+    app.use("/api/color", colorRouter);
 }
 
 export default routes;

@@ -26,9 +26,10 @@ import { Warehouse } from '../entity/Warehouse';
 import { WarehouseImport } from '../entity/WarehouseImport';
 import { RefreshToken } from '../entity/RefreshToken';
 import { RoomCategory } from '../entity/RoomCategory';
+import { Gallery } from '../entity/Gallery';
+import { Color } from '../entity/Color';
 import "reflect-metadata";
 import "dotenv/config";
-import { Gallery } from '../entity/Gallery';
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -37,7 +38,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [Address, Blog, BlogCategory, Customer, Employee, Factory, InventoryItem, Menu, Order, OrderDetail, Paymentmethod, Product, ProductBatche, ProductCategory, RoomCategory, ProductRequest, ProductVariant, QaulityCheck, Role, ShipmentDetail, Shipper, Shipping, SiteSetting, Staticspage, Warehouse, WarehouseImport, RefreshToken, Gallery],
+  entities: [Address, Blog, BlogCategory, Customer, Employee, Factory, InventoryItem, Menu, Order, OrderDetail, Paymentmethod, Product, ProductBatche, ProductCategory, RoomCategory, ProductRequest, ProductVariant, QaulityCheck, Role, ShipmentDetail, Shipper, Shipping, SiteSetting, Staticspage, Warehouse, WarehouseImport, RefreshToken, Gallery, Color],
   synchronize: true,
   logging: false,
 });

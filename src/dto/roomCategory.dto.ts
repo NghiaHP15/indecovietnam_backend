@@ -1,4 +1,5 @@
 import { RoomCategory } from "../entity/RoomCategory";
+import { ProductCategoryDto } from "./productCategory.dto";
 
 export interface RoomCategoryDto {
     id: string;
@@ -14,6 +15,7 @@ export interface ResponseRoomCategoryDto {
     slug: string;
     image?: string;
     featured: boolean;
+    productCategories?: ProductCategoryDto[];
 }
 
 export interface CreateRoomCategoryDto {

@@ -41,7 +41,10 @@ export const CreateAddress = async (dto: CreateAddressDto): Promise<ResponseAddr
 }
 
 export const updateAddress = async (id: string, dto: UpdateAddressDto): Promise<ResponseAddressDto | null> => {
-  const address = await addressRepo.findOneBy({ id });
+  const address = await addressRepo.findOne({ 
+    where: { id },
+    relations: ['customer'],
+  });
   if (!address) return null;
   Object.assign(address, dto);
   await addressRepo.save(address);

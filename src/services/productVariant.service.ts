@@ -3,6 +3,7 @@ import { productVariantRepo } from '../repositories/productVariant.repository';
 import { toResponseProductVariantDto } from '../automapper/productVariant.mapper';
 import { CreateProductVariantDto, ResponseProductVariantDto, UpdateProductVariantDto, QueryProductVariantDto } from './../dto/productVariant.dto';
 import { generateSku } from '../config/contant';
+import { updateProductMinMaxPrice } from './product.service';
 
 export const getAllProductVariants = async (query: QueryProductVariantDto): Promise<ResponseProductVariantDto[]> => {
     const { page = 1, limit = 10 } = query;
@@ -36,6 +37,7 @@ export const CreateProductVariant = async (dto: CreateProductVariantDto): Promis
   dto.sku = generateSku("Product Variant", dto.product.id);
   const productVariant = productVariantRepo.create({ ...dto });
   await productVariantRepo.save(productVariant);
+  await updateProductMinMaxPrice(dto.product.id);
   return toResponseProductVariantDto(productVariant);
 }
 
@@ -44,10 +46,17 @@ export const updaterProductVariant = async (id: string, dto: UpdateProductVarian
   if (!productVariant) return null;
   Object.assign(productVariant, dto);
   await productVariantRepo.save(productVariant);
+  await updateProductMinMaxPrice(dto.product.id);
   return toResponseProductVariantDto(productVariant);
 };
 
 export const deleteProductVariant = async (id: string): Promise<boolean> => {
+  const productVariant = await productVariantRepo.findOne({
+    where: { id },
+    relations: ['product']
+  });
+  if (!productVariant) return false;
   const result = await productVariantRepo.delete({ id });
+  await updateProductMinMaxPrice(productVariant.product.id);
   return result.affected !== 0;
 };

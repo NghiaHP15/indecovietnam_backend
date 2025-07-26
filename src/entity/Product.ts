@@ -30,6 +30,12 @@ export class Product {
     @Column({ type: 'boolean', default: false })
     featured!: boolean;
 
+    @Column({ type: 'float', default: 0 })
+    min_price!: number;
+
+    @Column({ type: 'float', default: 0 })
+    max_price!: number;
+
     @Column({type: 'text', nullable: true})
     body?: string;
 

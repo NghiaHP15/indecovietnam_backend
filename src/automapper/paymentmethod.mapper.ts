@@ -6,6 +6,7 @@ export const toResponsePaymentmethodDto = (paymentmethod: Paymentmethod): Respon
         id: paymentmethod.id,
         name: paymentmethod.name,
         description: paymentmethod.description,
+        image: paymentmethod.image,
         active: paymentmethod.active,
     }
 }

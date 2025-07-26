@@ -9,6 +9,9 @@ export class Paymentmethod {
     @Column({ type: 'varchar', length: 100, unique: true })
     name!: string;
 
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    image?: string;
+
     @Column({ type: 'varchar', length: 255 })
     description!: string;
 

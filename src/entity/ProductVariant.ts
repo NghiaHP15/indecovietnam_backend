@@ -2,8 +2,9 @@ import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGenerate
 import { Product } from "./Product";
 import { OrderDetail } from "./OrderDetail";
 import { ProductBatche } from "./ProductBatche";
-import { InventoryItem } from "./InventoryItem";
+// import { InventoryItem } from "./InventoryItem";
 import { ShipmentDetail } from "./ShipmentDetail";
+import { Color } from "./Color";
 
 @Entity()
 export class ProductVariant {
@@ -12,9 +13,6 @@ export class ProductVariant {
 
     @Column({ type: 'varchar', length: 50, unique: true })
     sku!: string;
-
-    @Column({ type: 'varchar', length: 50 })
-    color!: string;
 
     @Column({ type: 'varchar', length: 50 })
     size!: string;
@@ -31,11 +29,17 @@ export class ProductVariant {
     @Column({ type: 'boolean', default: true })
     is_active!: boolean;
 
-    @CreateDateColumn()
-    created_at!: Date
+    @Column({ type: 'int', default: 0 })
+    quatity!: number;
 
     @CreateDateColumn()
-    updated_at!: Date
+    created_at!: Date;
+
+    @CreateDateColumn()
+    updated_at!: Date;
+
+    @ManyToOne(() => Color, (color) => color.variants)
+    color!: Color
 
     @ManyToOne(() => Product, (product) => product.variants)
     product!: Product
@@ -45,9 +49,9 @@ export class ProductVariant {
     
     @OneToMany(() => OrderDetail, orderDetail => orderDetail.product_variant)
     order_details!: OrderDetail[];
-
-    @OneToMany(() => InventoryItem, (item) => item.product_variant)
-    inventory_items!: InventoryItem[];
+    
+    // @OneToMany(() => InventoryItem, (item) => item.product_variant)
+    // inventory_items!: InventoryItem[];
 
     @OneToMany(() => ShipmentDetail, (detail) => detail.item)
     shipment_details!: ShipmentDetail[];

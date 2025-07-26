@@ -22,7 +22,6 @@ export const getAllBlogs = async (query: QueryBlogDto): Promise<ResponseBlogDto[
         take: limit,
         skip
     });
-    console.log(blogs);
     
     return blogs.map(toResponseBlogDto);
 };

@@ -21,6 +21,16 @@ export const getProductById = async (req: Request, res: Response) => {
     }
 }
 
+export const getProductBySlug = async (req: Request, res: Response) => {
+    const slug = req.params.slug;
+    try {
+        const result = await productService.getProductBySlug(slug);
+        singleResponse(res, "Product found", result);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+}
+
 export const createProduct = async (req: Request, res: Response) => {
     try {
         const result = await productService.CreateProduct(req.body);

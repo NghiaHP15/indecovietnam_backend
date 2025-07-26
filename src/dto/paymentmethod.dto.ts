@@ -4,18 +4,21 @@ export interface ResponsePaymentMethodDto {
     id: string;
     name: string;
     description: string;
+    image?: string;
     active: boolean;
 }
 
 export interface CreatePaymentMethodDto {
     name: string;
     description: string;
+    image?: string;
     active: boolean;
 }
 
 export interface UpdatePaymentMethodDto {
     name?: string;
     description?: string;
+    image?: string;
     active?: boolean;
 }
 

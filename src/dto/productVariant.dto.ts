@@ -3,12 +3,17 @@ import { ProductVariant } from "../entity/ProductVariant";
 export interface ProductVariantDto {
     id: string;
     sku: string;
-    color: string;
+    color: {
+        id: string,
+        name: string,
+        code: string
+    }
     size: string;
     price: string;
     discount: string;
     image?:string;
     is_active: boolean;
+    quatity: number;
     product?: {
         id: string;
     };
@@ -17,12 +22,17 @@ export interface ProductVariantDto {
 export interface ResponseProductVariantDto {
     id: string;
     sku: string;
-    color: string;
+    color: {
+        id: string,
+        name: string,
+        code: string
+    }
     size: string;
     price: string;
     discount: string;
     image?:string;
     is_active: boolean;
+    quatity: number;
     product?: {
         id: string;
     };
@@ -30,12 +40,17 @@ export interface ResponseProductVariantDto {
 
 export interface CreateProductVariantDto {
     sku: string;
-    color: string;
+    color: {
+        id: string,
+        name: string,
+        code: string
+    }
     size: string;
     price: string;
     discount: string;
     image?:string;
     is_active: boolean;
+    quatity: number;
     product: { 
         id: string 
     };
@@ -43,12 +58,17 @@ export interface CreateProductVariantDto {
 
 export interface UpdateProductVariantDto {
     sku: string;
-    color: string;
+    color: {
+        id: string,
+        name: string,
+        code: string
+    }
     size: string;
     price: string;
     discount: string;
     image?:string;
     is_active: boolean;
+    quatity: number;
     product: { 
         id: string 
     };

@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ProductVariant } from "./ProductVariant";
+// import { ProductVariant } from "./ProductVariant";
 import { WarehouseImport } from "./WarehouseImport";
 import { Warehouse } from "./Warehouse";
 import { ProductBatche } from "./ProductBatche";
@@ -28,8 +28,8 @@ export class InventoryItem {
     @CreateDateColumn()
     updated_at!: Date;
 
-    @ManyToOne(() => ProductVariant, (variant) => variant.inventory_items)
-    product_variant!: ProductVariant;
+    // @ManyToOne(() => ProductVariant, (variant) => variant.inventory_items)
+    // product_variant!: ProductVariant;
 
     @ManyToOne(() => ProductBatche, (batche) => batche.inventory_items)
     batche!: ProductBatche;
