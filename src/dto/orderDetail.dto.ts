@@ -2,6 +2,7 @@ import { OrderDetail } from "../entity/OrderDetail";
 
 export interface OrderDetailDto {
     id: string;
+    name: string;
     total_price: number;
     quantity: number;
     order: {
@@ -14,6 +15,7 @@ export interface OrderDetailDto {
 
 export interface ResponseOrderDetailDto {
     id: string;
+    name: string;
     total_price: number;
     quantity: number;
     product_variant: {
@@ -25,6 +27,7 @@ export interface ResponseOrderDetailDto {
 }
 
 export interface CreateOrderDetailDto {
+    name: string;
     total_price: number;
     quantity: number;
     product_variant: {
@@ -36,6 +39,7 @@ export interface CreateOrderDetailDto {
 }
 
 export interface UpdateOrderDetailDto {
+    name: string;
     total_price?: string;
     quantity?: number;
     product_variant?: {

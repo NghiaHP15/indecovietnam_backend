@@ -1,9 +1,9 @@
 // @ts-ignore
 import { body } from "express-validator";
 import * as customerService from "../services/customer.service";
-import * as paymentmethodService from "../services/paymentmethod.service";
 import * as productVariantService from "../services/productVariant.service";
 import * as orderService from "../services/productVariant.service";
+import { PaymentMethod } from "../utils/enum";
 
 export const validateCreateOrder = [
     body("customer.id")
@@ -16,15 +16,9 @@ export const validateCreateOrder = [
         }
     }),
 
-    body("paymentmethod.id")
+    body("paymentmethod")
     .notEmpty().withMessage("Payment method ID is required.")
-    .isUUID().withMessage("Payment method ID must be a valid UUID.")
-    .custom(async (id: string) => {
-        const result = await paymentmethodService.getPaymentMethodById(id);
-        if (!result) {
-            throw new Error("Payment method not found.");
-        }
-    }),
+    .isUUID().withMessage("Payment method ID must be a valid UUID."),
 
     body("products")
     .isArray({ min: 1 }).withMessage("Order must contain at least one product."),

@@ -21,6 +21,16 @@ export const getOrderById = async (req: Request, res: Response) => {
     }
 }
 
+export const getOrderByTxnRef = async (req: Request, res: Response) => {
+    const txnRef = req.params.txnRef;
+    try {
+        const result = await orderService.getOrderByTxnRef(txnRef);
+        singleResponse(res, "Order found", result);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+}
+
 export const createOrder = async (req: Request, res: Response) => {
     try {
         const result = await orderService.createOrder(req.body);

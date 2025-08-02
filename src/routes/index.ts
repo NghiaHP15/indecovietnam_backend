@@ -14,9 +14,12 @@ import roleRouter from "./role.route";
 import menuRouter from "./menu.route";
 import galleryRouter from "./gallery.route";
 import settingRouter from "./siteSetting.route";
-import paymentMethodRouter from "./paymentmethod.route";
 import orderRouter from "./order.route";
 import colorRouter from "./color.route";
+import paymentRouter from "./payment.route";
+import feedbackRouter from "./feedback.route";
+import serviceRouter from "./service.route";
+import serviceCategoryRouter from "./serviceCategory.route";
 
 const routes = (app: Application): void => {
     app.use("/api/customer", customerRouter);
@@ -33,9 +36,12 @@ const routes = (app: Application): void => {
     app.use("/api/menu", menuRouter);
     app.use("/api/gallery", galleryRouter);
     app.use("/api/setting", settingRouter);
-    app.use("/api/payment-method", paymentMethodRouter);
     app.use("/api/order", orderRouter);
     app.use("/api/color", colorRouter);
+    app.use("/api/payment", paymentRouter);
+    app.use("/api/feedback", feedbackRouter);
+    app.use("/api/service", serviceRouter);
+    app.use("/api/service-category", serviceCategoryRouter);
 }
 
 export default routes;

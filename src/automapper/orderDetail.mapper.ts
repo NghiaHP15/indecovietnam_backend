@@ -4,6 +4,7 @@ import { OrderDetail } from "../entity/OrderDetail";
 export const toResponseOrderDetailDto = (orderDetail: OrderDetail): ResponseOrderDetailDto => {
     return {
         id: orderDetail.id,
+        name: orderDetail.name,
         total_price: orderDetail.total_price,
         quantity: orderDetail.quantity,
         product_variant: { 

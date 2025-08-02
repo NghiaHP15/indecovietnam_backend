@@ -2,8 +2,8 @@ import { Like } from "typeorm";
 import { CreateOrderDto, QueryOrderDto, ResponseOrderDto, UpdateOrderDto } from "../dto/order.dto";
 import { orderRepo } from "../repositories/order.repository";
 import { toResponseOrderDto } from "../automapper/order.mapper";
-import { generateSku, generateUUID } from "../config/contant";
 import * as orderDetailService from "./orderDetail.service";
+import * as productVariantService from "./productVariant.service";
 
 
 export const getAllOrders = async (query: QueryOrderDto): Promise<ResponseOrderDto[]> => {
@@ -16,7 +16,7 @@ export const getAllOrders = async (query: QueryOrderDto): Promise<ResponseOrderD
 
     const [orders] = await orderRepo.findAndCount({ 
         where,
-        relations: ['paymentmethod', 'customer', 'products', 'products.product_variant', 'products.order' ],
+        relations: ['customer', 'products', 'products.product_variant', 'products.order' ],
         order: {
             [query.sortBy || 'created_at']: query.order || 'desc',
         },
@@ -30,16 +30,37 @@ export const getAllOrders = async (query: QueryOrderDto): Promise<ResponseOrderD
 export const getOrderById = async (id: string): Promise<ResponseOrderDto | null> => {
   const order = await orderRepo.findOne({ 
     where: { id },
-    relations: ['paymentmethod', 'customer', 'products', 'products.product_variant', 'products.order'],
+    relations: ['customer', 'products', 'products.product_variant', 'products.order'],
+  });
+  return order ? toResponseOrderDto(order) : null;
+};
+
+export const getOrderByTxnRef = async (txnRef: string): Promise<ResponseOrderDto | null> => {
+  const order = await orderRepo.findOne({ 
+    where: { txnRef },
+    relations: ['customer', 'products', 'products.product_variant', 'products.order'],
   });
   return order ? toResponseOrderDto(order) : null;
 };
 
 export const createOrder = async (dto: CreateOrderDto): Promise<ResponseOrderDto> => {
-    dto.id = generateUUID();
-    dto.code = generateSku("Order", dto.customer.id);
+    dto.products = await Promise.all(
+      dto.products.map(async (item) => {
+        const variant = await productVariantService.getProductVariantById(item.product_variant.id);
+        const total_price = Number(variant?.price ?? 0) * item.quantity;
+        return { 
+          ...item, 
+          total_price, 
+          product_variant: { id: item.product_variant.id } 
+        };
+      })
+    );
+
+    dto.total_amount = dto.products.reduce((sum, p) => sum + p.total_price, 0);
+
     const order = orderRepo.create({ ...dto });
     await orderRepo.save(order);
+
     const detailPromises = dto.products.map(detail =>
       orderDetailService.createOrderDetail({ 
         ...detail,

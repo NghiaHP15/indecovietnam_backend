@@ -56,6 +56,7 @@ export enum PaymentStatus {
     PENDING = 'pending',
     PAID = 'paid',
     CANCELLED = 'cancelled',
+    FAILED = 'failed',
 }
 
 export enum ProductRequestStatus {
@@ -113,4 +114,10 @@ export enum TypeGallery {
     BANNER = 'banner',
     DESIGN = 'design',
     SOCIAL = 'social',
+}
+
+export enum PaymentMethod {
+    MOMO = 'momo',
+    VNPAY = 'vnpay',
+    BANK = 'bank'
 }

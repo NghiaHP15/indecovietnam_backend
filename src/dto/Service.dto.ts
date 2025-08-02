@@ -1,69 +1,47 @@
-import { Blog } from "../entity/Blog";
+import { Service } from "../entity/Service";
 
-export interface ResponseBlogDto {
+export interface ResponseServiceDto {
     id: string;
     title: string;
     slug: string;
     image?: string;
     description?: string;
-    latest_blog: boolean;
     published_at?: Date;
     tag?: string[];
     body?: string;
-    created_at: Date;
-    updated_at: Date;
     category: {
         id: string;
         title: string;
         slug: string;
     },
-    author: {
-        id: string;
-        fullname: string;
-    }
 }
 
-export interface CreateBlogDto {
+export interface CreateServiceDto {
     title: string;
     slug: string;
     image: string;
     description: string;
-    latest_blog: boolean;
     body: string;
     published_at: Date;
     tag?: string[];
-    category: {
-        id: string;
-    };
-    author: {
-        id: string;
-    };
+    category: { id: string };
 }
 
-export interface UpdateBlogDto {
+export interface UpdateServiceDto {
     title: string;
     slug: string;
     image: string;
     description: string;
-    latest_blog: boolean;
     body: string;
     published_at: Date;
     tag?: string[];
-    category: {
-        id: string;
-    };
-    author: {
-        id: string;
-    };
+    category: { id: string };
 }
 
-export interface QueryBlogDto {
+export interface QueryServiceDto {
   page?: number;
   limit?: number;
   search?: string;
-  category?: string;
-  tag?: string;
-  latest_blog?: boolean;
-  sortBy?: keyof Blog;
+  sortBy?: keyof Service;
   order?: 'asc' | 'desc';
 }

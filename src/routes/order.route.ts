@@ -7,6 +7,7 @@ const router = Router();
 
 router.get("/", orderController.getAllOrders);
 router.get("/:id", orderController.getOrderById);
+router.get("/txnref/:txnRef", orderController.getOrderByTxnRef);
 router.post("/", validateCreateOrder, handleValidationError, orderController.createOrder);
 router.put("/:id", orderController.updateOrder);
 router.delete("/:id", orderController.deleteOrder);

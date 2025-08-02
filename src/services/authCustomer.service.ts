@@ -103,7 +103,8 @@ export const generateTokens = (customer: Customer) => {
 export const generateUser = (cutomer: Customer) => {
     const user: ResponseCustomerDto = { 
         id: cutomer.id,
-        email: cutomer.email, 
+        email: cutomer.email,
+        phone: cutomer.phone, 
         firstname: cutomer.firstname, 
         lastname: cutomer.lastname, 
         avatar: cutomer.avatar, 

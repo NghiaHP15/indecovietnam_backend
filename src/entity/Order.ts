@@ -1,6 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { OrderStatus, PaymentStatus } from "../utils/enum";
-import { Paymentmethod } from "./Paymentmethod";
+import { OrderStatus, PaymentMethod, PaymentStatus } from "../utils/enum";
 import { Customer } from "./Customer";
 import { OrderDetail } from "./OrderDetail";
 import { ProductRequest } from "./ProductRequest";
@@ -9,10 +8,10 @@ import { Shipping } from "./Shipping";
 @Entity()
 export class Order {
     @PrimaryGeneratedColumn('uuid')
-    id!: string
+    id!: string;
 
-    @Column({ type: 'varchar', length: 50, unique: true })
-    code!: string;
+    @Column({ type: 'varchar', length: 255, unique: true })
+    txnRef!: string;
 
     @Column({ type: 'timestamp' })
     order_date!: Date;
@@ -22,6 +21,9 @@ export class Order {
 
     @Column({ type: 'decimal' })
     total_amount!: number;
+    
+    @Column({ type: "enum", enum: PaymentMethod, default: PaymentMethod.VNPAY })
+    paymentmethod!: PaymentMethod;
 
     @Column({ type: 'enum', enum: PaymentStatus, default: PaymentStatus.PENDING })
     payment_status!: PaymentStatus;
@@ -37,9 +39,6 @@ export class Order {
 
     @CreateDateColumn()
     updated_at!: Date;
-
-    @ManyToOne(() => Paymentmethod, (paymentmethod) => paymentmethod.orders)
-    paymentmethod!: Paymentmethod;
 
     @ManyToOne(() => Customer, (customer) => customer.orders)
     customer!: Customer

@@ -1,20 +1,31 @@
 import { Order } from "../entity/Order";
-import { OrderStatus, PaymentStatus } from "../utils/enum";
+import { OrderStatus, PaymentMethod, PaymentStatus } from "../utils/enum";
 import { CreateOrderDetailDto, OrderDetailDto } from "./orderDetail.dto";
 
-export interface ResponseOrderDto {
+
+export interface OrderDto {
     id: string;
-    code: string;
+    txnRef: string;
     order_date: Date;
     status: OrderStatus;
     total_amount: number;
     payment_status: PaymentStatus;
     address: string;
     note: string;
-    paymentmethod: {
-        id: string;
-        name: string;
-    }
+    paymentmethod: PaymentMethod;
+    products?: OrderDetailDto[];
+}
+
+export interface ResponseOrderDto {
+    id: string;
+    txnRef: string;
+    order_date: Date;
+    status: OrderStatus;
+    total_amount: number;
+    payment_status: PaymentStatus;
+    address: string;
+    note: string;
+    paymentmethod: PaymentMethod;
     customer: {
         id: string;
         email: string;
@@ -28,16 +39,13 @@ export interface ResponseOrderDto {
 
 export interface CreateOrderDto {
     id: string;
-    code: string;
     order_date: Date;
     status: OrderStatus;
     total_amount: number;
     payment_status: PaymentStatus;
     address: string;
     note: string;
-    paymentmethod: {
-        id: string;
-    }
+    paymentmethod: PaymentMethod;
     customer: {
         id: string;
     },
@@ -45,17 +53,15 @@ export interface CreateOrderDto {
 }
 
 export interface UpdateOrderDto {
-    code: string;
+    code?: string;
     order_date?: Date;
     status?: OrderStatus;
     total_amount?: string;
     payment_status?: PaymentStatus;
     address?: string;
     note?: string;
-    paymentmethod: {
-        id?: string;
-    }
-    customer: {
+    paymentmethod?: PaymentMethod;
+    customer?: {
         id?: string;
     }
 }

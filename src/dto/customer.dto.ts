@@ -1,6 +1,7 @@
 import { Customer } from "../entity/Customer";
 import { Gender, Level, Provider } from "../utils/enum";
 import { AddressDto } from "./address.dto";
+import { OrderDto } from "./order.dto";
 
 
 export interface CreateCustomerDto {
@@ -70,6 +71,7 @@ export interface ResponseCustomerDto {
   avatar?: string;
   provider?: Provider;
   addresses?: AddressDto[];
+  orders?: OrderDto[];
 }
 
 export interface QueryCustomerDto {

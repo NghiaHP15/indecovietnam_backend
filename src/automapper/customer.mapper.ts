@@ -21,6 +21,17 @@ export const toResponseCustomerDto = (customer: Customer): ResponseCustomerDto =
             district: address.district,
             city: address.city,
             default: address.default
+        })),
+        orders: customer.orders && customer.orders.map(order => ({
+            id: order.id,
+            txnRef: order.txnRef,
+            order_date: order.order_date,
+            status: order.status,
+            total_amount: order.total_amount,
+            payment_status: order.payment_status,
+            address: order.address,
+            note: order.note,
+            paymentmethod: order.paymentmethod,
         }))
     }
 }

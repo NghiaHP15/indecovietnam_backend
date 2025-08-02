@@ -9,7 +9,6 @@ import { InventoryItem } from '../entity/InventoryItem';
 import { Menu } from '../entity/Menu';
 import { Order } from '../entity/Order';
 import { OrderDetail } from '../entity/OrderDetail';
-import { Paymentmethod } from '../entity/Paymentmethod';
 import { Product } from '../entity/Product';
 import { ProductBatche } from '../entity/ProductBatche';
 import { ProductCategory } from '../entity/ProductCategory';
@@ -28,6 +27,9 @@ import { RefreshToken } from '../entity/RefreshToken';
 import { RoomCategory } from '../entity/RoomCategory';
 import { Gallery } from '../entity/Gallery';
 import { Color } from '../entity/Color';
+import { Feedback } from '../entity/Feedback';
+import { Service } from '../entity/Service';
+import { ServiceCategory } from '../entity/ServiceCategory';
 import "reflect-metadata";
 import "dotenv/config";
 
@@ -38,7 +40,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [Address, Blog, BlogCategory, Customer, Employee, Factory, InventoryItem, Menu, Order, OrderDetail, Paymentmethod, Product, ProductBatche, ProductCategory, RoomCategory, ProductRequest, ProductVariant, QaulityCheck, Role, ShipmentDetail, Shipper, Shipping, SiteSetting, Staticspage, Warehouse, WarehouseImport, RefreshToken, Gallery, Color],
+  entities: [Address, Blog, BlogCategory, Customer, Employee, Factory, InventoryItem, Menu, Order, OrderDetail, Product, ProductBatche, ProductCategory, RoomCategory, ProductRequest, ProductVariant, QaulityCheck, Role, ShipmentDetail, Shipper, Shipping, SiteSetting, Staticspage, Warehouse, WarehouseImport, RefreshToken, Gallery, Color, Feedback, Service, ServiceCategory],
   synchronize: true,
   logging: false,
 });
