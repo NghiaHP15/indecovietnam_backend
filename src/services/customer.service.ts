@@ -29,7 +29,7 @@ export const getAllCustomers = async (query: QueryCustomerDto): Promise<Response
 export const getCustomerByEmail = async (email: string): Promise<ResponseCustomerDto | null> => {
   const customer = await customerRepo.findOne({ 
     where: { email },
-    relations: ['addresses', 'orders'],
+    relations: ['addresses', 'orders', 'orders.products', 'orders.products.product_variant'],
    });
   return customer ? toResponseCustomerDto(customer) : null;
 };

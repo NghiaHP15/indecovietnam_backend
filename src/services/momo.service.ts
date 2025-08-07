@@ -1,7 +1,8 @@
 import crypto from "crypto";
 import axios from "axios";
 import { orderRepo } from "../repositories/order.repository";
-// import * as orderService from "./order.service";
+import * as productVariantService from "./productVariant.service";
+import * as orderService from "./order.service";
 import { PaymentStatus } from "../utils/enum";
 
 const momoConfig = {
@@ -14,10 +15,7 @@ const momoConfig = {
 }
 
 export const MomoService = {
-    async createPayment({id, total_amount, txnRef}: {id: string, total_amount: number, txnRef: string}) {
-        // const  = id.replace(/-/g, "").substring(0, 20);
-        // const dto = { id, total_amount, txnRef, ...order };
-        // await orderService.createOrder(dto);
+    async createPayment({total_amount, txnRef}: {total_amount: number, txnRef: string}) {
 
         const rawSignature = 
             `accessKey=${momoConfig.accessKey}` +
@@ -27,8 +25,8 @@ export const MomoService = {
             `&orderId=${txnRef}` +
             `&orderInfo=Thanh toán Momo` +
             `&partnerCode=${momoConfig.partnerCode}` +
-            `&redirectUrl=${momoConfig.returnUrl}/api/payment/momo/return` +
-            `&requestId=${id}` +
+            `&redirectUrl=${momoConfig.returnUrl}/api/order/momo/return` +
+            `&requestId=${txnRef}` +
             `&requestType=payWithMethod`;
         
         const signature = crypto.createHmac("sha256", momoConfig.secretKey)
@@ -38,11 +36,11 @@ export const MomoService = {
         const body = {
             partnerCode: momoConfig.partnerCode,
             accessKey: momoConfig.accessKey,
-            requestId: id,
+            requestId: txnRef,
             amount: total_amount,
             orderId: txnRef,
             orderInfo: "Thanh toán Momo",
-            redirectUrl: `${momoConfig.returnUrl}/api/payment/momo/return`,
+            redirectUrl: `${momoConfig.returnUrl}/api/order/momo/return`,
             ipnUrl: momoConfig.ipnUrl,
             extraData: "",
             requestType: "payWithMethod",
@@ -63,11 +61,20 @@ export const MomoService = {
     async handleIpn(ipnData: any, res: any) {
         // ✅ Verify chữ ký
         if (!this.verifySignature(ipnData)) return res.status(400).json({ message: "Invalid signature" });
-
-        const order = await orderRepo.findOneBy({ txnRef: ipnData.orderId });
+        const order = await orderService.getOrderByTxnRef(ipnData.orderId );
         if (order) {
-        order.payment_status = ipnData.resultCode == 0 ? PaymentStatus.PAID : PaymentStatus.FAILED;
-        await orderRepo.save(order);
+            const isPaid = ipnData.resultCode == 0;
+            order.payment_status = isPaid ? PaymentStatus.PAID : PaymentStatus.FAILED;
+            await orderRepo.save(order);
+
+            if (isPaid) {
+                await Promise.all(
+                order.products.map(item =>
+                    productVariantService.confirm(item.product_variant.id, item.quantity)
+                )
+                );
+                status = 'success';
+            }
         }
 
         return res.json({ message: "IPN OK" });

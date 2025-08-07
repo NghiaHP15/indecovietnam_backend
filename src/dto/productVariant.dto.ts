@@ -13,7 +13,9 @@ export interface ProductVariantDto {
     discount: string;
     image?:string;
     is_active: boolean;
-    quatity: number;
+    quantity_in_stock: number;
+    quantity_reserved: number;
+    quantity_selled: number;
     product?: {
         id: string;
     };
@@ -32,7 +34,9 @@ export interface ResponseProductVariantDto {
     discount: string;
     image?:string;
     is_active: boolean;
-    quatity: number;
+    quantity_in_stock: number;
+    quantity_reserved: number;
+    quantity_selled: number;
     product?: {
         id: string;
     };
@@ -51,6 +55,7 @@ export interface CreateProductVariantDto {
     image?:string;
     is_active: boolean;
     quatity: number;
+    quantity_in_stock: number;
     product: { 
         id: string 
     };
@@ -69,6 +74,7 @@ export interface UpdateProductVariantDto {
     image?:string;
     is_active: boolean;
     quatity: number;
+    quantity_in_stock: number;
     product: { 
         id: string 
     };

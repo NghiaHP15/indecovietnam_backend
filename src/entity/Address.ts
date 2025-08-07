@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Customer } from "./Customer";
+import { Order } from "./Order";
 
 @Entity()
 export class Address {
@@ -8,6 +9,9 @@ export class Address {
 
     @Column({ type: 'varchar', length: 255 })
     receiver_name!: string;
+
+    @Column({ type: 'varchar', length: 20, nullable: true, unique: true })
+    phone?: string;
 
     @Column({ type: 'varchar', length: 255 })
     address_line!: string;
@@ -21,7 +25,7 @@ export class Address {
     @Column({ type: 'varchar', length: 255 })
     city!: string;
 
-    @Column()
+    @Column({type: 'boolean', default: false})
     default!: boolean;
 
     @CreateDateColumn()
@@ -32,4 +36,7 @@ export class Address {
 
     @ManyToOne(() => Customer, (customer) => customer.addresses)
     customer!: Customer;
+
+    @OneToMany(() => Order, (order) => order.address)
+    orders!: Order[];
 }

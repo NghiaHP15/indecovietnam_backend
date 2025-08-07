@@ -59,6 +59,7 @@ export const loginWithSocial = async (req: Request, res: Response) => {
 
 export const refresh = async (req: Request, res: Response) => {
   const token = req.cookies.refreshToken;
+  
   try {
     const result = await authService.refreshAccessToken(token);
     const { refreshToken, accessToken, user} = result;

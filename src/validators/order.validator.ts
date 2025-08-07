@@ -17,8 +17,7 @@ export const validateCreateOrder = [
     }),
 
     body("paymentmethod")
-    .notEmpty().withMessage("Payment method ID is required.")
-    .isUUID().withMessage("Payment method ID must be a valid UUID."),
+    .notEmpty().withMessage("Payment method ID is required."),
 
     body("products")
     .isArray({ min: 1 }).withMessage("Order must contain at least one product."),

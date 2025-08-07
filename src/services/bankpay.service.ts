@@ -1,12 +1,16 @@
-// import * as orderService from "./order.service";
+import { orderRepo } from "../repositories/order.repository";
+import { PaymentStatus } from "../utils/enum";
+import { getOrderByTxnRef } from "./order.service";
 
 export const BankPayService = {
-  createPayment: async ({ id, total_amount, txnRef }: { id: string, total_amount: number, txnRef: string }) => {
-    // const txnRef = id.replace(/-/g, "").substring(0, 20);
-    // const dto = { id, total_amount, txnRef, ...order };
-    // const result = await orderService.createOrder(dto);
-    // const success = !!result;
-    // ✅ Chỉ trả về URL
+  createPayment: async ({ txnRef }: { txnRef: string }) => {
+    const order = await getOrderByTxnRef(txnRef);
+    
+    if (order) {
+      order.payment_status = PaymentStatus.AWAITTING_CONFIRMATION;
+      await orderRepo.save(order);
+    }
+    
     return `${process.env.CLIENT_URL}/payment/result?status=success&txnRef=${txnRef}`;
   },
 };

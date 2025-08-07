@@ -2,7 +2,7 @@ import { Like } from "typeorm";
 import { CreateOrderDetailDto, QueryOrderDetailDto, ResponseOrderDetailDto, UpdateOrderDetailDto } from "../dto/orderDetail.dto";
 import { orderDetailRepo } from "../repositories/orderDetail.repository";
 import { toResponseOrderDetailDto } from "../automapper/orderDetail.mapper";
-import { generateSku } from "../config/contant";
+import { generateSku, generateSlug } from "../config/contant";
 
 
 export const getAllOrderDetails = async (query: QueryOrderDetailDto): Promise<ResponseOrderDetailDto[]> => {
@@ -29,6 +29,7 @@ export const getOrderDetailById = async (id: string): Promise<ResponseOrderDetai
 };
 
 export const createOrderDetail = async (dto: CreateOrderDetailDto): Promise<ResponseOrderDetailDto> => {
+    dto.slug = dto.slug || generateSlug(dto.name);
     const orderDetail = orderDetailRepo.create({ ...dto });
     await orderDetailRepo.save(orderDetail);
     return toResponseOrderDetailDto(orderDetail);

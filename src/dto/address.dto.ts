@@ -3,6 +3,7 @@ import { Address } from "../entity/Address";
 export interface AddressDto {
     id: string;
     receiver_name?: string;
+    phone?: string;
     address_line: string;
     ward: string;
     district: string;
@@ -13,6 +14,7 @@ export interface AddressDto {
 export interface ResponseAddressDto {
     id: string;
     receiver_name?: string;
+    phone?: string;
     address_line: string;
     ward: string;
     district: string;
@@ -28,6 +30,7 @@ export interface ResponseAddressDto {
 
 export interface CreateAddressDto {
     receiver_name?: string;
+    phone?: string;
     address_line: string;
     ward: string;
     district: string;
@@ -40,6 +43,7 @@ export interface CreateAddressDto {
 
 export interface UpdateAddressDto {
     receiver_name?: string;
+    phone?: string;
     address_line?: string;
     ward?: string;
     district?: string;

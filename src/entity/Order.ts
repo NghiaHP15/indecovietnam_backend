@@ -4,6 +4,7 @@ import { Customer } from "./Customer";
 import { OrderDetail } from "./OrderDetail";
 import { ProductRequest } from "./ProductRequest";
 import { Shipping } from "./Shipping";
+import { Address } from "./Address";
 
 @Entity()
 export class Order {
@@ -31,14 +32,14 @@ export class Order {
     @Column({ type: 'varchar', length: 255 })
     note!: string;
 
-    @Column({ type: 'varchar', length: 255 })
-    address!: string;
-
     @CreateDateColumn()
     created_at!: Date;
 
     @CreateDateColumn()
     updated_at!: Date;
+
+    @ManyToOne(() => Address, (address) => address.orders)
+    address!: Address;
 
     @ManyToOne(() => Customer, (customer) => customer.orders)
     customer!: Customer

@@ -34,7 +34,9 @@ export const toResponseProductDto = (product: Product): ResponseProductDto => {
                 name: variant.color.name,
                 code: variant.color.code,
             },
-            quatity: variant.quatity,
+            quantity_in_stock: variant.quantity_in_stock,
+            quantity_reserved: variant.quantity_reserved,
+            quantity_selled: variant.quantity_selled,
             discount: variant.discount,
             is_active: variant.is_active
         }))

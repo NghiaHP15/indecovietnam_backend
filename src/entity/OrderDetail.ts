@@ -7,8 +7,11 @@ export class OrderDetail {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @Column({ type: 'varchar', length: 255, default: '' })
+    @Column({ type: 'varchar', length: 255})
     name!: string;
+
+    @Column({ type: 'varchar', length: 255, default: '' })
+    slug!: string;
 
     @Column({ type: 'decimal' })
     total_price!: number;

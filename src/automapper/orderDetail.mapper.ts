@@ -5,6 +5,7 @@ export const toResponseOrderDetailDto = (orderDetail: OrderDetail): ResponseOrde
     return {
         id: orderDetail.id,
         name: orderDetail.name,
+        slug: orderDetail.slug,
         total_price: orderDetail.total_price,
         quantity: orderDetail.quantity,
         product_variant: { 

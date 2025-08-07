@@ -9,9 +9,17 @@ export const toResponseOrderDto = (order: Order): ResponseOrderDto => {
         status: order.status,
         total_amount: order.total_amount,
         payment_status: order.payment_status,
-        address: order.address,
         note: order.note,
         paymentmethod: order.paymentmethod,
+        address: {
+            id: order.address.id,
+            receiver_name: order.address.receiver_name,
+            phone: order.address.phone,
+            address_line: order.address.address_line,
+            ward: order.address.ward,
+            district: order.address.district,
+            city: order.address.city
+        },
         customer: {
             id: order.customer.id,
             email: order.customer.email,
@@ -21,13 +29,20 @@ export const toResponseOrderDto = (order: Order): ResponseOrderDto => {
         products: order.products.map(product => ({
             id: product.id,
             name: product.name,
+            slug: product.slug,
             total_price: product.total_price,
             quantity: product.quantity,
             product_variant: {
                 id: product.product_variant.id,
                 image: product.product_variant.image,
                 sku: product.product_variant.sku,
-                price: product.product_variant.price
+                price: product.product_variant.price,
+                discount: product.product_variant.discount,
+                color: product.product_variant.color ? {
+                    id: product.product_variant.color.id,
+                    name: product.product_variant.color.name,
+                    code: product.product_variant.color.code
+                } : undefined,
             },
             order: {
                 id: order.id

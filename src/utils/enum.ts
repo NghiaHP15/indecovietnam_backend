@@ -55,6 +55,7 @@ export enum OrderStatus {
 export enum PaymentStatus {
     PENDING = 'pending',
     PAID = 'paid',
+    AWAITTING_CONFIRMATION = 'awaiting_confirmation',
     CANCELLED = 'cancelled',
     FAILED = 'failed',
 }

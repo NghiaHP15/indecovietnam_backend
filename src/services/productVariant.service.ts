@@ -60,3 +60,31 @@ export const deleteProductVariant = async (id: string): Promise<boolean> => {
   await updateProductMinMaxPrice(productVariant.product.id);
   return result.affected !== 0;
 };
+
+export const reserve = async(id: string, qty: number) =>  {
+  const pv = await productVariantRepo.findOneBy({ id });
+  if(!pv) throw new Error('Variant not found');
+  if(pv.quantity_in_stock - pv.quantity_reserved < qty) throw new Error('Not enough stock');
+  pv.quantity_reserved += qty;
+  await productVariantRepo.save(pv);
+}
+
+export const confirm = async(id: string, qty: number) =>  {
+  const pv = await productVariantRepo.findOneBy({ id });
+  if(!pv) throw new Error('Variant not found');
+  pv.quantity_in_stock -= qty;
+  pv.quantity_reserved -= qty;
+  pv.quantity_selled += qty;
+  if(pv.quantity_in_stock < 0) pv.quantity_in_stock = 0;
+  if(pv.quantity_reserved < 0) pv.quantity_reserved = 0;
+  await productVariantRepo.save(pv);
+}
+
+export const release = async(id: string, qty: number) =>  {
+  const pv = await productVariantRepo.findOneBy({ id });
+  if(!pv) throw new Error('Variant not found');
+  if(pv.quantity_reserved < qty) throw new Error('Not enough reserved stock');
+  pv.quantity_reserved -= qty;
+  if(pv.quantity_reserved < 0) pv.quantity_reserved = 0;
+  await productVariantRepo.save(pv);
+}

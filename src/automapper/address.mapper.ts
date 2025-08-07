@@ -5,6 +5,7 @@ export const toResponseAddressDto = (address: Address): ResponseAddressDto => {
     return {
         id: address.id,
         receiver_name: address.receiver_name,
+        phone: address.phone,
         address_line: address.address_line,
         ward: address.ward,
         district: address.district,

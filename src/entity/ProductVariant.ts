@@ -30,7 +30,13 @@ export class ProductVariant {
     is_active!: boolean;
 
     @Column({ type: 'int', default: 0 })
-    quatity!: number;
+    quantity_in_stock!: number;
+
+    @Column({ type: 'int', default: 0 })
+    quantity_reserved!: number;
+
+    @Column({ type: 'int', default: 0 })
+    quantity_selled!: number;
 
     @CreateDateColumn()
     created_at!: Date;

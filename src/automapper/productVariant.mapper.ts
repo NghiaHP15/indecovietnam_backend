@@ -9,7 +9,9 @@ export const toResponseProductVariantDto = (productVariant: ProductVariant): Res
     image: productVariant.image,
     price: productVariant.price,
     discount: productVariant.discount,
-    quatity: productVariant.quatity,
+    quantity_in_stock: productVariant.quantity_in_stock,
+    quantity_reserved: productVariant.quantity_reserved,
+    quantity_selled: productVariant.quantity_selled,
     is_active: productVariant.is_active,
     product: { id: productVariant.product.id },
 }) 
