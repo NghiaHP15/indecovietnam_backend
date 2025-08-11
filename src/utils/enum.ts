@@ -122,3 +122,10 @@ export enum PaymentMethod {
     VNPAY = 'vnpay',
     BANK = 'bank'
 }
+
+export enum TypeFeedback {
+    CONTACT = 'contact',
+    DESIGN = 'design',
+    FEEDBACK = 'feedback',
+    OTHER = 'other'
+}

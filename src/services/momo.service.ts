@@ -4,6 +4,8 @@ import { orderRepo } from "../repositories/order.repository";
 import * as productVariantService from "./productVariant.service";
 import * as orderService from "./order.service";
 import { PaymentStatus } from "../utils/enum";
+import { emailQueue } from "../queues/email.queue";
+import { EmailJobType } from "../types/email";
 
 const momoConfig = {
     partnerCode: process.env.MOMO_PARTNER_CODE || "",
@@ -69,11 +71,11 @@ export const MomoService = {
 
             if (isPaid) {
                 await Promise.all(
-                order.products.map(item =>
-                    productVariantService.confirm(item.product_variant.id, item.quantity)
+                    order.products.map(item =>
+                        productVariantService.confirm(item.product_variant.id, item.quantity)
+                    )
                 )
-                );
-                status = 'success';
+                emailQueue.add({ to: order.customer.email, payload: order, type: EmailJobType.CONFIRM_ORDER });
             }
         }
 

@@ -63,9 +63,6 @@ export const createOrder = async (req: Request, res: Response) => {
                 res.status(400).json({ message: "Payment method not supported!" });
                 return;
         }
-    
-        emailQueue.add({ to: customer.email, order: order });
-
         singleResponse(res, "Success", { paymentUrl: url });
     } catch (error) {
         errorResponse(res, error);

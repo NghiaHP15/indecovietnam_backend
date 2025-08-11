@@ -2,10 +2,12 @@ import { Customer } from './../entity/Customer';
 import { RegisterCustomerDto, LoginCustomerDto, ResponseCustomerDto, SocialLoginCustomerDto } from "../dto/customer.dto";
 import { customerRepo } from "../repositories/customer.repository";
 import { Provider } from "../utils/enum";
-import { generateAccessToken, generateRefreshToken } from "../utils/jwt";
+import { generateAccessToken, generateOtp, generateRefreshToken, verifyOtp } from "../utils/jwt";
 import bcrypt from "bcryptjs";
 import { refreshTokenRepo } from "../repositories/refreshToken.repository";
 import { createError } from '../utils/response';
+import { emailQueue } from '../queues/email.queue';
+import { EmailJobType } from '../types/email';
 
 export const register = async (dto: RegisterCustomerDto) => {
     const exists = await customerRepo.findOneBy({ email: dto.email });
@@ -76,6 +78,36 @@ export const logout = async (refreshToken: string) => {
     if(!existing) throw createError('Invalid refresh token', 401);
     await refreshTokenRepo.delete({ id: existing.id });
 }
+
+export const forgotPassword = async (email: string) => {
+    const user = await customerRepo.findOneBy({ email });
+    if(!user) throw createError("Email not found", 401);
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    const token = generateOtp({ email, otp });
+    await emailQueue.add({ to: email, payload: { email, otp }, type: EmailJobType.RESET_PASSWORD });
+    return { token };
+}
+
+export const confirmOtp = async (token: string, otp: number) => {
+    const decoded = verifyOtp(token);
+    
+    if (Number(decoded.otp) !== Number(otp)) throw createError("Invalid otp", 401);
+    
+    return true;
+}
+
+export const resetPassword = async (token: string, newPassword: string) => {
+    const decoded = verifyOtp(token);
+    if (!decoded) throw createError("Invalid token", 401);
+
+    const customer = await customerRepo.findOneBy({ email: decoded.email });
+    if (!customer) throw createError("Email not found", 401);
+
+    const password_hash = await bcrypt.hash(newPassword, 10);
+    customer.password_hash = password_hash;
+    await customerRepo.save(customer);
+    return customer;
+};
 
 export const refreshAccessToken = async (token: string) => {
     const existing = await refreshTokenRepo.findOne({ where: { token }, relations: ["customer"] });
