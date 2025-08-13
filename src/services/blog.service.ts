@@ -1,15 +1,19 @@
-import { Like } from 'typeorm';
+import { ILike, Like, Raw } from 'typeorm';
 import { CreateBlogDto, QueryBlogDto, ResponseBlogDto, UpdateBlogDto } from '../dto/blog.dto';
 import { blogRepo } from '../repositories/blog.repository';
 import { toResponseBlogDto } from '../automapper/blog.mapper';
-import { generateSlug } from '../config/contant';
+import { generateNormalized, generateSlug } from '../config/contant';
 
 export const getAllBlogs = async (query: QueryBlogDto): Promise<ResponseBlogDto[]> => {
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
     const where = {
-      ...(query.search ? { title: Like(`%${query.search}%`) } : {}),
+      ...(query.search ? { 
+        title_normalized: Raw(alias => `${alias} LIKE :search`, {
+          search: `%${generateNormalized(query.search).toLowerCase()}%`
+        }),
+      } : {}),
       ...(query.latest_blog ? { latest_blog: query.latest_blog } : {}),
       ...(query.category ? { category: { id: query.category } } : {}),
       ...(query.tag ? { tag: Like(`%${query.tag}%`) } : {}),
@@ -45,7 +49,6 @@ export const getBlogBySlug = async (slug: string): Promise<ResponseBlogDto | nul
 };
 
 export const CreateBlog = async (dto: CreateBlogDto): Promise<ResponseBlogDto> => {
-  dto.slug = generateSlug(dto.title);
   const blog = blogRepo.create({ ...dto });
   await blogRepo.save(blog);
   return toResponseBlogDto(blog);
@@ -55,7 +58,6 @@ export const updateBlog = async (id: string, dto: UpdateBlogDto): Promise<Respon
   const blog = await blogRepo.findOneBy({ id });
   if (!blog) return null;
   Object.assign(blog, dto);
-  blog.slug = generateSlug(dto.title);
   await blogRepo.save(blog);
   return toResponseBlogDto(blog);
 };

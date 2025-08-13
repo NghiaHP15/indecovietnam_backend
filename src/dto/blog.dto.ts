@@ -25,7 +25,6 @@ export interface ResponseBlogDto {
 
 export interface CreateBlogDto {
     title: string;
-    slug: string;
     image: string;
     description: string;
     latest_blog: boolean;
@@ -42,17 +41,16 @@ export interface CreateBlogDto {
 
 export interface UpdateBlogDto {
     title: string;
-    slug: string;
-    image: string;
-    description: string;
-    latest_blog: boolean;
-    body: string;
-    published_at: Date;
+    image?: string;
+    description?: string;
+    latest_blog?: boolean;
+    body?: string;
+    published_at?: Date;
     tag?: string[];
-    category: {
+    category?: {
         id: string;
     };
-    author: {
+    author?: {
         id: string;
     };
 }

@@ -33,3 +33,11 @@ export const generateTxnRef = (prefix: string = "PAY", userId?: string) => {
 
   return `${prefix.toUpperCase()}-${timestamp}${userId ? `-${newID}` : ""}`;
 }
+
+export const generateNormalized = (str: string) => {
+  return str
+    .normalize("NFD") // tách dấu
+    .replace(/[\u0300-\u036f]/g, "") // xóa dấu
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D");
+}

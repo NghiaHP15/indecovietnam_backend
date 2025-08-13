@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { BlogCategory } from "./BlogCategory";
 import { Employee } from "./Employee";
+import { generateNormalized, generateSlug } from "../config/contant";
 
 @Entity()
 export class Blog {
@@ -12,6 +13,9 @@ export class Blog {
 
     @Column({ type: 'varchar', length: 255, unique: true })
     slug!: string;
+
+    @Column({ type: 'varchar', length: 255, unique: true })
+    title_normalized!: string;
 
     @Column({ type: 'text', nullable: true })
     description?: string;
@@ -42,4 +46,15 @@ export class Blog {
 
     @ManyToOne(() => Employee, (employee) => employee.blogs)
     author!: Employee;
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    normalizeTitle() {
+        this.title_normalized = generateNormalized(this.title).toLowerCase();
+    }
+    @BeforeInsert()
+    @BeforeUpdate()
+    slugTitle() {
+        this.slug = generateSlug(this.title);
+    }
 }
