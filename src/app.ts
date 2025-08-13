@@ -11,7 +11,10 @@ const app = express();
 app.use(corsMiddleware)
 app.use(cookieParser());
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:3000" || "http://localhost:3001", // hoặc domain thật nếu deploy frontend
+  origin: [
+    process.env.CLIENT_URL || "http://localhost:3000",
+    process.env.ADMIN_URL || "http://localhost:3001",
+  ],
   credentials: true,               // nếu dùng cookie / axios withCredentials
 }));
 
