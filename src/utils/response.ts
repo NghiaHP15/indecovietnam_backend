@@ -8,7 +8,7 @@ export const successResponse = (
         success: true,
         message,
         data,
-        pageInfo,
+        pageInfo: pageInfo,
     });
 }
 

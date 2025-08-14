@@ -19,6 +19,7 @@ import colorRouter from "./color.route";
 import feedbackRouter from "./feedback.route";
 import serviceRouter from "./service.route";
 import serviceCategoryRouter from "./serviceCategory.route";
+import uploadRouter from "./upload.router";
 
 const routes = (app: Application): void => {
     app.use("/api/customer", customerRouter);
@@ -40,6 +41,7 @@ const routes = (app: Application): void => {
     app.use("/api/feedback", feedbackRouter);
     app.use("/api/service", serviceRouter);
     app.use("/api/service-category", serviceCategoryRouter);
+    app.use("/api/upload", uploadRouter);
 }
 
 export default routes;
