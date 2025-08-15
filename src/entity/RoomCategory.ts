@@ -19,6 +19,9 @@ export class RoomCategory {
     @Column({ type: 'varchar', length: 255, nullable: true })
     image?: string;
 
+    @Column({ type: 'text', nullable: true, default: '' })
+    description?: string;
+
     @Column({ type: 'boolean', default: false })
     featured!: boolean;
 

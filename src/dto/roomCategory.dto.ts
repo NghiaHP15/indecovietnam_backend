@@ -6,6 +6,7 @@ export interface RoomCategoryDto {
     title: string;
     slug: string;
     image?: string;
+    description?: string;
     featured: boolean;
 }
 
@@ -14,6 +15,7 @@ export interface ResponseRoomCategoryDto {
     title: string;
     slug: string;
     image?: string;
+    description?: string;
     featured: boolean;
     productCategories?: ProductCategoryDto[];
 }
@@ -22,6 +24,7 @@ export interface CreateRoomCategoryDto {
     title: string;
     slug: string;
     image: string;
+    description?: string;
     featured: boolean;
 }
 
@@ -29,6 +32,7 @@ export interface UpdateRoomCategoryDto {
     title: string;
     slug: string;
     image: string;
+    description?: string;
     featured: boolean;
 }
 
