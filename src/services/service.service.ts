@@ -1,15 +1,19 @@
-import { Like } from "typeorm";
+import { Like, Raw } from "typeorm";
 import { CreateServiceDto, QueryServiceDto, ResponseServiceDto, UpdateServiceDto } from "../dto/Service.dto";
 import { serviceRepo } from "../repositories/service.repository";
 import { toResponseServiceDto } from "../automapper/service.mapper";
-import { generateSlug } from "../config/contant";
+import { generateNormalized, generateSlug } from "../config/contant";
 
 export const getAllServices = async (query: QueryServiceDto): Promise<ResponseServiceDto[]> => {
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
     const where = {
-      ...(query.search ? { title: Like(`%${query.search}%`) } : {}),
+      ...(query.search ? { 
+        title_normalized: Raw(alias => `${alias} LIKE :search`, {
+          search: `%${generateNormalized(query.search).toLowerCase()}%`
+        }),
+      } : {}),
     };
 
     const [services] = await serviceRepo.findAndCount({ 
@@ -42,7 +46,6 @@ export const getServiceBySlug = async (slug: string): Promise<ResponseServiceDto
 };
 
 export const createService = async (dto: CreateServiceDto): Promise<ResponseServiceDto> => {
-  dto.slug = generateSlug(dto.title);
   const service = serviceRepo.create({ ...dto });
   await serviceRepo.save(service);
   return toResponseServiceDto(service);
@@ -52,7 +55,6 @@ export const updateService = async (id: string, dto: UpdateServiceDto): Promise<
   const service = await serviceRepo.findOneBy({ id });
   if (!service) return null;
   Object.assign(service, dto);
-  service.slug = generateSlug(dto.title);
   await serviceRepo.save(service);
   return toResponseServiceDto(service);
 };

@@ -1,16 +1,21 @@
-import { Like } from 'typeorm';
+import { Like, Raw } from 'typeorm';
 import { productCategoryRepo } from '../repositories/productCategory.repository';
 import { toResponseProductCategoryDto } from '../automapper/productCategory.mapper';
 import { CreateProductCategoryDto, QueryProductCategoryDto, ResponseProductCategoryDto, UpdateProductCategoryDto } from '../dto/productCategory.dto';
 import slugify from 'slugify';
+import { generateNormalized } from '../config/contant';
 
 export const getAllProductCategories = async (query: QueryProductCategoryDto): Promise<ResponseProductCategoryDto[]> => {
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
-    const where = query.search ? [
-        { title: Like(`%${query.search}%`) },
-    ] : {};
+    const where = {
+      ...(query.search ? { 
+        title_normalized: Raw(alias => `${alias} LIKE :search`, {
+          search: `%${generateNormalized(query.search).toLowerCase()}%`
+        }),
+      } : {}),
+    }
 
     const [productCategories] = await productCategoryRepo.findAndCount({ 
         where,

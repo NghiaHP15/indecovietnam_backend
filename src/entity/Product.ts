@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { StatusProduct } from "../utils/enum";
 import { ProductVariant } from "./ProductVariant";
 import { ProductCategory } from "./ProductCategory";
+import { generateNormalized, generateSlug } from "../config/contant";
 
 @Entity()
 export class Product {
@@ -13,6 +14,9 @@ export class Product {
 
     @Column({ type: 'varchar', length: 255, unique: true })
     slug!: string;
+
+    @Column({ type: 'varchar', length: 255, default: '' })
+    name_normalized?: string;
 
     @Column({ type: 'varchar', length: 255,  nullable: true })
     image?: string;
@@ -50,4 +54,15 @@ export class Product {
 
     @OneToMany(() => ProductVariant, variant => variant.product)
     variants!: ProductVariant[];
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    normalizeName() {
+        this.name_normalized = generateNormalized(this.name).toLowerCase();
+    }
+    @BeforeInsert()
+    @BeforeUpdate()
+    slugName() {
+        this.slug = generateSlug(this.name);
+    }
 }

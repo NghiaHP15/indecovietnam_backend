@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { ProductCategory } from "./ProductCategory";
+import { generateNormalized, generateSlug } from "../config/contant";
 
 @Entity()
 export class RoomCategory {
@@ -11,6 +12,9 @@ export class RoomCategory {
 
     @Column({ type: 'varchar', length: 255, unique: true })
     slug!: string;
+
+    @Column({ type: 'varchar', length: 255, default: '' })
+    title_normalized?: string;
 
     @Column({ type: 'varchar', length: 255, nullable: true })
     image?: string;
@@ -26,4 +30,15 @@ export class RoomCategory {
 
     @OneToMany(() => ProductCategory, category => category.roomCategory)
     productCategories!: ProductCategory[];
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    normalizeTitle() {
+        this.title_normalized = generateNormalized(this.title).toLowerCase();
+    }
+    @BeforeInsert()
+    @BeforeUpdate()
+    slugTitle() {
+        this.slug = generateSlug(this.title);
+    }
 }

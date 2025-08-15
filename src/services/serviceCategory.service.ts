@@ -1,8 +1,8 @@
-import { Like } from "typeorm";
+import { Like, Raw } from "typeorm";
 import { CreateServiceCategoryDto, QueryServiceCategoryDto, ResponseServiceCategoryDto, UpdateServiceCategoryDto } from "../dto/serviceCategory";
 import { serviceCategoryRepo } from "../repositories/serviceCategory.repository";
 import { toResponseServiceCategoryDto } from "../automapper/serviceCategory";
-import { generateSlug } from "../config/contant";
+import { generateNormalized, generateSlug } from "../config/contant";
 
 
 export const getAllServiceCategories = async (query: QueryServiceCategoryDto): Promise<ResponseServiceCategoryDto[]> => {
@@ -10,8 +10,13 @@ export const getAllServiceCategories = async (query: QueryServiceCategoryDto): P
     const skip = (page - 1) * limit;
 
     const where = {
-      ...(query.search ? { title: Like(`%${query.search}%`) } : {}),
-    };
+      ...(query.search ? { 
+        title_normalized: Raw(alias => `${alias} LIKE :search`, {
+          search: `%${generateNormalized(query.search).toLowerCase()}%`
+        }),
+      } : {}),
+    }
+    
 
     const [serviceCategorys] = await serviceCategoryRepo.findAndCount({ 
         where,
@@ -32,7 +37,6 @@ export const getServiceCategoryById = async (id: string): Promise<ResponseServic
 
 
 export const createServiceCategory = async (dto: CreateServiceCategoryDto): Promise<ResponseServiceCategoryDto> => {
-  dto.slug = generateSlug(dto.title);
   const serviceCategory = serviceCategoryRepo.create({ ...dto });
   await serviceCategoryRepo.save(serviceCategory);
   return toResponseServiceCategoryDto(serviceCategory);
@@ -42,7 +46,6 @@ export const updateServiceCategory = async (id: string, dto: UpdateServiceCatego
   const serviceCategory = await serviceCategoryRepo.findOneBy({ id });
   if (!serviceCategory) return null;
   Object.assign(serviceCategory, dto);
-  serviceCategory.slug = generateSlug(dto.title);
   await serviceCategoryRepo.save(serviceCategory);
   return toResponseServiceCategoryDto(serviceCategory);
 };

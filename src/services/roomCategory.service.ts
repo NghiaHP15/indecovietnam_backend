@@ -1,16 +1,21 @@
 import { roomCategoryRepo } from './../repositories/roomCategory.repository';
 import { CreateRoomCategoryDto, QueryRoomCategoryDto, ResponseRoomCategoryDto, UpdateRoomCategoryDto } from '../dto/roomCategory.dto';
 import { toResponseRoomCategoryDto } from '../automapper/roomCategory.mapper';
-import { Like } from 'typeorm';
+import { Like, Raw } from 'typeorm';
 import slugify from 'slugify';
+import { generateNormalized } from '../config/contant';
 
 export const getAllRoomCategories = async (query: QueryRoomCategoryDto): Promise<ResponseRoomCategoryDto[]> => {
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
-    const where = query.search ? [
-        { title: Like(`%${query.search}%`) },
-    ] : {};
+    const where = {
+      ...(query.search ? { 
+        title_normalized: Raw(alias => `${alias} LIKE :search`, {
+          search: `%${generateNormalized(query.search).toLowerCase()}%`
+        }),
+      } : {})
+    }
 
     const [roomCategories] = await roomCategoryRepo.findAndCount({ 
         where,
@@ -30,7 +35,6 @@ export const getRoomCategoryById = async (id: string): Promise<ResponseRoomCateg
 };
 
 export const CreateRoomCategory = async (dto: CreateRoomCategoryDto): Promise<ResponseRoomCategoryDto> => {
-  dto.slug = generateSlug(dto.title);
   const roomCategory = roomCategoryRepo.create({ ...dto });
   await roomCategoryRepo.save(roomCategory);
   return toResponseRoomCategoryDto(roomCategory);
@@ -40,7 +44,6 @@ export const updateRoomCategory = async (id: string, dto: UpdateRoomCategoryDto)
   const roomCategory = await roomCategoryRepo.findOneBy({ id });
   if (!roomCategory) return null;
   Object.assign(roomCategory, dto);
-  roomCategory.slug = generateSlug(dto.title);
   await roomCategoryRepo.save(roomCategory);
   return toResponseRoomCategoryDto(roomCategory);
 };

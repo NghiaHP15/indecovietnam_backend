@@ -7,7 +7,7 @@ export const toResponseRoomCategoryDto = (roomCategory: RoomCategory): ResponseR
     slug: roomCategory.slug,
     image: roomCategory.image,
     featured: roomCategory.featured,
-    productCategories: roomCategory.productCategories.map(productCategory => ({
+    productCategories: roomCategory.productCategories && roomCategory.productCategories.map(productCategory => ({
         id: productCategory.id,
         title: productCategory.title,
         slug: productCategory.slug,

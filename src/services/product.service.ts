@@ -1,8 +1,8 @@
-import { Like } from 'typeorm';
+import { Like, Raw } from 'typeorm';
 import { CreateProductDto, QueryProductDto, ResponseProductDto, UpdateProductDto } from '../dto/product.dto';
 import { productRepo } from '../repositories/product.repository';
 import { toResponseProductDto } from '../automapper/product.mapper';
-import { generateSlug } from '../config/contant';
+import { generateNormalized, generateSlug } from '../config/contant';
 import { productVariantRepo } from '../repositories/productVariant.repository';
 
 export const getAllProducts = async (query: QueryProductDto): Promise<ResponseProductDto[]> => {
@@ -10,7 +10,11 @@ export const getAllProducts = async (query: QueryProductDto): Promise<ResponsePr
     const skip = (page - 1) * limit;
 
     const where = {
-        ...(query.search ? { title: Like(`%${query.search}%`) } : {}),
+        ...(query.search ? { 
+          name_normalized: Raw(alias => `${alias} LIKE :search`, {
+            search: `%${generateNormalized(query.search).toLowerCase()}%`
+          }),
+        } : {}),
         ...(query.status ? { status: query.status } : {}),
         ...(query.featured ? { featured: query.featured } : {}),
         ...(query.productCategory ? { productCategory: { id: query.productCategory } } : {}),

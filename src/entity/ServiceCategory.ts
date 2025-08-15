@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Service } from "./Service";
+import { generateNormalized, generateSlug } from "../config/contant";
 
 @Entity()
 export class ServiceCategory {
@@ -11,6 +12,9 @@ export class ServiceCategory {
 
     @Column({ type: 'varchar', length: 255, unique: true })
     slug!: string
+    
+    @Column({ type: 'varchar', length: 255, default: '' })
+    title_normalized?: string;
 
     @Column({ type: 'text', nullable: true })
     description?: string
@@ -23,4 +27,15 @@ export class ServiceCategory {
 
     @OneToMany(() => Service, service => service.category)
     services!: Service[];
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    normalizeTitle() {
+        this.title_normalized = generateNormalized(this.title).toLowerCase();
+    }
+    @BeforeInsert()
+    @BeforeUpdate()
+    slugTitle() {
+        this.slug = generateSlug(this.title);
+    }
 }
