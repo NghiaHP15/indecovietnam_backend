@@ -52,7 +52,10 @@ export class Product {
     @ManyToOne(() => ProductCategory, productCategory => productCategory.products)
     productCategory!: ProductCategory;
 
-    @OneToMany(() => ProductVariant, variant => variant.product)
+    @OneToMany(() => ProductVariant, variant => variant.product, {
+        cascade: true,
+        onDelete: 'CASCADE'
+    })
     variants!: ProductVariant[];
 
     @BeforeInsert()

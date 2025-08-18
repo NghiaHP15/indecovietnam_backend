@@ -47,7 +47,9 @@ export class ProductVariant {
     @ManyToOne(() => Color, (color) => color.variants)
     color!: Color
 
-    @ManyToOne(() => Product, (product) => product.variants)
+    @ManyToOne(() => Product, (product) => product.variants, {
+        onDelete: 'CASCADE'
+    })
     product!: Product
     
     @ManyToOne(() => ProductBatche, (batche) => batche.variants)
