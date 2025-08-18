@@ -2,8 +2,9 @@ import { Like, Raw } from 'typeorm';
 import { CreateProductDto, QueryProductDto, ResponseProductDto, UpdateProductDto } from '../dto/product.dto';
 import { productRepo } from '../repositories/product.repository';
 import { toResponseProductDto } from '../automapper/product.mapper';
-import { generateNormalized, generateSlug } from '../config/contant';
+import { generateNormalized } from '../config/contant';
 import { productVariantRepo } from '../repositories/productVariant.repository';
+import { createProductVariant, getProductVariantById, updaterProductVariant } from './productVariant.service';
 
 export const getAllProducts = async (query: QueryProductDto): Promise<ResponseProductDto[]> => {
     const { page = 1, limit = 10 } = query;
@@ -51,9 +52,12 @@ export const getProductBySlug = async (slug: string): Promise<ResponseProductDto
 
 
 export const CreateProduct = async (dto: CreateProductDto): Promise<ResponseProductDto> => {
-    dto.slug = generateSlug(dto.name);
-    const product = productRepo.create({ ...dto });
-    await productRepo.save(product);
+    const product = await productRepo.save(productRepo.create({ ...dto }));
+    if(dto.variants) {
+      await Promise.all(dto.variants.map(detail =>
+        createProductVariant({ ...detail, product: { id: product.id }})
+      ));
+    }
     return toResponseProductDto(product);
 }
 
@@ -61,8 +65,17 @@ export const updaterProduct = async (id: string, dto: UpdateProductDto): Promise
   const product = await productRepo.findOneBy({ id });
   if (!product) return null;
   Object.assign(product, dto);
-  product.slug = generateSlug(dto.name);
   await productRepo.save(product);
+  if(dto.variants) {
+    await Promise.all(dto.variants.map(detail => {
+      const ischeck = getProductVariantById(detail.id);
+      if(ischeck !== null) {
+        return updaterProductVariant(detail.id, {...detail, product: { id: product.id }});
+      } else {
+        return createProductVariant({ ...detail, product: { id: product.id }});
+      }
+    }));
+  }
   return toResponseProductDto(product);
 };
 

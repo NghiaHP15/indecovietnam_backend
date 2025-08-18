@@ -5,7 +5,6 @@ import { OrderStatus, PaymentMethod, PaymentStatus } from "../utils/enum";
 import { VNPayService } from "../services/vnpay.service";
 import { BankPayService } from "../services/bankpay.service";
 import { MomoService } from "../services/momo.service";
-import { emailQueue } from "../queues/email.queue";
 import { generateTxnRef, generateUUID } from "../config/contant";
 import { getClientIp } from "../utils/crypto.hepler";
 

@@ -6,7 +6,7 @@ import { generateAccessToken, generateOtp, generateRefreshToken, verifyOtp } fro
 import bcrypt from "bcryptjs";
 import { refreshTokenRepo } from "../repositories/refreshToken.repository";
 import { createError } from '../utils/response';
-import { emailQueue } from '../queues/email.queue';
+// import { emailQueue } from '../queues/email.queue';
 import { EmailJobType } from '../types/email';
 
 export const register = async (dto: RegisterCustomerDto) => {
@@ -84,7 +84,7 @@ export const forgotPassword = async (email: string) => {
     if(!user) throw createError("Email not found", 401);
     const otp = Math.floor(100000 + Math.random() * 900000);
     const token = generateOtp({ email, otp });
-    await emailQueue.add({ to: email, payload: { email, otp }, type: EmailJobType.RESET_PASSWORD });
+    // await emailQueue.add({ to: email, payload: { email, otp }, type: EmailJobType.RESET_PASSWORD });
     return { token };
 }
 

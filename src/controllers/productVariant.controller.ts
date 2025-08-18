@@ -24,7 +24,7 @@ export const getProductVariantById = async (req: Request, res: Response) => {
 
 export const createProductVariant = async (req: Request, res: Response) => {
     try {
-        const result = await productVariantService.CreateProductVariant(req.body);
+        const result = await productVariantService.createProductVariant(req.body);
         singleResponse(res, "Product variant created", result);
     } catch (error) {
         errorResponse(res, error);

@@ -1,6 +1,6 @@
 import { Product } from "../entity/Product";
 import { StatusProduct } from "../utils/enum";
-import { ProductVariantDto } from "./productVariant.dto";
+import { CreateProductVariantDto, ProductVariantDto, UpdateProductVariantDto } from "./productVariant.dto";
 
 export interface ResponseProductDto {
     id: string;
@@ -35,6 +35,7 @@ export interface CreateProductDto {
     featured: boolean;
     body?: string;
     productCategory: { id: string };
+    variants?: CreateProductVariantDto[];
 }
 
 export interface UpdateProductDto {
@@ -46,6 +47,7 @@ export interface UpdateProductDto {
     featured: boolean;
     body?: string;
     productCategory: { id: string };
+    variants?: UpdateProductVariantDto[];
 }
 
 export interface QueryProductDto {

@@ -43,6 +43,7 @@ export interface ResponseProductVariantDto {
 }
 
 export interface CreateProductVariantDto {
+    id: string;
     sku: string;
     color: {
         id: string,
@@ -54,7 +55,6 @@ export interface CreateProductVariantDto {
     discount: string;
     image?:string;
     is_active: boolean;
-    quatity: number;
     quantity_in_stock: number;
     product: { 
         id: string 
@@ -62,6 +62,7 @@ export interface CreateProductVariantDto {
 }
 
 export interface UpdateProductVariantDto {
+    id: string;
     sku: string;
     color: {
         id: string,
@@ -73,7 +74,6 @@ export interface UpdateProductVariantDto {
     discount: string;
     image?:string;
     is_active: boolean;
-    quatity: number;
     quantity_in_stock: number;
     product: { 
         id: string 
