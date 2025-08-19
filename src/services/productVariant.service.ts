@@ -34,7 +34,6 @@ export const getProductVariantById = async (id: string): Promise<ResponseProduct
 };
 
 export const createProductVariant = async (dto: CreateProductVariantDto): Promise<ResponseProductVariantDto> => {
-  dto.sku = generateSku("Product Variant", dto.product.id);
   const productVariant = productVariantRepo.create({ ...dto });
   await productVariantRepo.save(productVariant);
   await updateProductMinMaxPrice(dto.product.id);

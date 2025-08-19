@@ -1,10 +1,11 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Product } from "./Product";
 import { OrderDetail } from "./OrderDetail";
 import { ProductBatche } from "./ProductBatche";
 // import { InventoryItem } from "./InventoryItem";
 import { ShipmentDetail } from "./ShipmentDetail";
 import { Color } from "./Color";
+import { generateSku } from "../config/contant";
 
 @Entity()
 export class ProductVariant {
@@ -63,4 +64,12 @@ export class ProductVariant {
 
     @OneToMany(() => ShipmentDetail, (detail) => detail.item)
     shipment_details!: ShipmentDetail[];
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    generateSku() {
+        if (!this.sku) {
+            this.sku = generateSku("PV", this.id ?? Date.now().toString());
+        }
+    }
 }
