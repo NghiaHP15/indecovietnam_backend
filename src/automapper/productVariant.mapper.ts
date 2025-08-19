@@ -4,7 +4,7 @@ import { ProductVariant } from "../entity/ProductVariant";
 export const toResponseProductVariantDto = (productVariant: ProductVariant): ResponseProductVariantDto => ({
     id: productVariant.id,
     sku: productVariant.sku,
-    color: productVariant.color,
+    color: { id: productVariant.color.id, name: productVariant.color.name, code: productVariant.color.code },
     size: productVariant.size,
     image: productVariant.image,
     price: productVariant.price,
@@ -13,5 +13,5 @@ export const toResponseProductVariantDto = (productVariant: ProductVariant): Res
     quantity_reserved: productVariant.quantity_reserved,
     quantity_selled: productVariant.quantity_selled,
     is_active: productVariant.is_active,
-    product: { id: productVariant.product.id },
+    product: { id: productVariant.product.id, name: productVariant.product.name, },
 }) 

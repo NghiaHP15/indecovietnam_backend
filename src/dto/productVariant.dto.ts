@@ -18,6 +18,7 @@ export interface ProductVariantDto {
     quantity_selled: number;
     product?: {
         id: string;
+        name: string;
     };
 }
 
@@ -39,6 +40,7 @@ export interface ResponseProductVariantDto {
     quantity_selled: number;
     product?: {
         id: string;
+        name: string;
     };
 }
 

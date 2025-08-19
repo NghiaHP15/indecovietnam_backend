@@ -15,7 +15,7 @@ export const getAllProductVariants = async (query: QueryProductVariantDto): Prom
 
     const [productVariants] = await productVariantRepo.findAndCount({ 
         where,
-        relations: ['product'],
+        relations: ['product', 'color'],
         order: {
             [query.sortBy || 'created_at']: query.order || 'desc',
         },
