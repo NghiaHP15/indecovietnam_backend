@@ -66,7 +66,6 @@ export class ProductVariant {
     shipment_details!: ShipmentDetail[];
 
     @BeforeInsert()
-    @BeforeUpdate()
     generateSku() {
         if (!this.sku) {
             this.sku = generateSku("PV", this.id ?? Date.now().toString());

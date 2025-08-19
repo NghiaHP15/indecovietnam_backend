@@ -61,32 +61,66 @@ export const CreateProduct = async (dto: CreateProductDto): Promise<ResponseProd
     return toResponseProductDto(product);
 }
 
-export const updaterProduct = async (id: string, dto: UpdateProductDto): Promise<ResponseProductDto | null> => {
-  const product = await productRepo.findOne({ where: { id }, relations: ['variants'] });
+export const updaterProduct = async ( id: string, dto: UpdateProductDto ): Promise<ResponseProductDto | null> => {
+  const product = await productRepo.findOne({
+    where: { id },
+    relations: [ 'productCategory', 'productCategory.roomCategory', 'variants', 'variants.color' ],
+  });
+
   if (!product) return null;
-  Object.assign(product, dto);
+
+  // Tách variant ra để xử lý riêng
+  const { variants: variantsDto, ...productDto } = dto;
+
+  // Cập nhật product chính
+  Object.assign(product, productDto);
   await productRepo.save(product);
 
-  if(dto.variants) {
-    const newVariantIds = dto.variants.map(detail => detail.id);
+  if (variantsDto) {
     const oldVariants = product.variants || [];
-    const variantsDtoDelete = oldVariants.filter(detail => !newVariantIds.includes(detail.id));
-    if(variantsDtoDelete.length) {
-      await Promise.all(variantsDtoDelete.map(detail => deleteProductVariant(detail.id)));
+    const newVariantIds = variantsDto.map((v) => v.id);
+
+    // Xoá những variant cũ không có trong dto
+    const variantsToDelete = oldVariants.filter(
+      (v) => !newVariantIds.includes(v.id)
+    );
+    if (variantsToDelete.length) {
+      await Promise.all(
+        variantsToDelete.map((v) => deleteProductVariant(v.id))
+      );
     }
+
+    // Update hoặc create
+    await Promise.all(
+      variantsDto.map(async (detail) => {
+        const exists = await getProductVariantById(detail.id);
+        if (exists) {
+          return updaterProductVariant(detail.id, {
+            ...detail,
+            product: { id: product.id },
+          });
+        } else {
+          return createProductVariant({
+            ...detail,
+            product: { id: product.id },
+          });
+        }
+      })
+    );
   }
 
-  if(dto.variants) {
-    await Promise.all(dto.variants.map(detail => {
-      const ischeck = getProductVariantById(detail.id);
-      if(ischeck !== null) {
-        return updaterProductVariant(detail.id, {...detail, product: { id: product.id }});
-      } else {
-        return createProductVariant({ ...detail, product: { id: product.id }});
-      }
-    }));
-  }
-  return toResponseProductDto(product);
+  // Trả về DTO mới nhất
+  const updatedProduct = await productRepo.findOne({
+    where: { id },
+    relations: [
+      'productCategory',
+      'productCategory.roomCategory',
+      'variants',
+      'variants.color',
+    ],
+  });
+
+  return updatedProduct ? toResponseProductDto(updatedProduct) : null;
 };
 
 export const deleteProduct = async (id: string): Promise<boolean> => {
