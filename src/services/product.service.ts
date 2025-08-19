@@ -4,7 +4,7 @@ import { productRepo } from '../repositories/product.repository';
 import { toResponseProductDto } from '../automapper/product.mapper';
 import { generateNormalized } from '../config/contant';
 import { productVariantRepo } from '../repositories/productVariant.repository';
-import { createProductVariant, getProductVariantById, updaterProductVariant } from './productVariant.service';
+import { createProductVariant, deleteProductVariant, getProductVariantById, updaterProductVariant } from './productVariant.service';
 
 export const getAllProducts = async (query: QueryProductDto): Promise<ResponseProductDto[]> => {
     const { page = 1, limit = 10 } = query;
@@ -62,10 +62,20 @@ export const CreateProduct = async (dto: CreateProductDto): Promise<ResponseProd
 }
 
 export const updaterProduct = async (id: string, dto: UpdateProductDto): Promise<ResponseProductDto | null> => {
-  const product = await productRepo.findOneBy({ id });
+  const product = await productRepo.findOne({ where: { id }, relations: ['variants'] });
   if (!product) return null;
   Object.assign(product, dto);
   await productRepo.save(product);
+
+  if(dto.variants) {
+    const newVariantIds = dto.variants.map(detail => detail.id);
+    const oldVariants = product.variants || [];
+    const variantsDtoDelete = oldVariants.filter(detail => !newVariantIds.includes(detail.id));
+    if(variantsDtoDelete.length) {
+      await Promise.all(variantsDtoDelete.map(detail => deleteProductVariant(detail.id)));
+    }
+  }
+
   if(dto.variants) {
     await Promise.all(dto.variants.map(detail => {
       const ischeck = getProductVariantById(detail.id);
