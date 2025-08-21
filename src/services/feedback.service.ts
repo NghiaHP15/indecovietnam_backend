@@ -1,4 +1,4 @@
-import { Like } from "typeorm";
+import { ILike } from "typeorm";
 import { CreateFeedbackDto, QueryFeedbackDto, ResponseFeedbackDto, UpdateFeedbackDto } from "../dto/feedback.dto";
 import { feedbackRepo } from "../repositories/feedback.repository";
 import { toResponseFeedbackDto } from "../automapper/feedback.mapper";
@@ -9,7 +9,8 @@ export const getAllFeedbacks = async (query: QueryFeedbackDto): Promise<Response
     const skip = (page - 1) * limit;
 
     const where = {
-      ...(query.search ? { name: Like(`%${query.search}%`) } : {}),
+      ...(query.search ? { email: ILike(`%${query.search}%`) } : {}),
+      ...(query.type ? { type: query.type } : {}),
       ...(query.show ? { show: query.show } : {}),
     };
     

@@ -41,6 +41,7 @@ export interface QueryFeedbackDto {
   page?: number;
   limit?: number;
   search?: string;
+  type?: TypeFeedback;
   show?: boolean;
   sortBy?: keyof Feedback;
   order?: 'asc' | 'desc';

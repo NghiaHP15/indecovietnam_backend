@@ -1,11 +1,31 @@
+import { Raw } from "typeorm";
 import { toResponseMenuDto } from "../automapper/menu.mapper";
-import { CreateMenuDto, ResponseMenuDto, UpdateMenuDto } from "../dto/menu.dto";
+import { CreateMenuDto, QueryMenuDto, ResponseMenuDto, UpdateMenuDto } from "../dto/menu.dto";
 import { menuRepo } from "../repositories/menu.repository";
+import { generateNormalized } from "../config/contant";
 
 
-export const getAllMenus = async (): Promise<ResponseMenuDto[]> => {
-    const [menus] = await menuRepo.findAndCount();
-    return menus.map(toResponseMenuDto);
+export const getAllMenus = async (query: QueryMenuDto): Promise<ResponseMenuDto[]> => {
+  const { page = 1, limit = 10 } = query;
+  const skip = (page - 1) * limit;
+
+  const where = {
+    ...(query.search ? { 
+      name_normalized: Raw(alias => `${alias} LIKE :search`, {
+        search: `%${generateNormalized(query.search).toLowerCase()}%`
+      }),
+    } : {}),
+  };
+
+  const [menus] = await menuRepo.findAndCount({
+    where,
+    order: {
+      [query.sortBy || 'created_at']: query.order || 'desc',
+    },
+    take: limit,
+    skip
+  });
+  return menus.map(toResponseMenuDto);
 };
 
 export const getMenuById = async (id: string): Promise<ResponseMenuDto | null> => {

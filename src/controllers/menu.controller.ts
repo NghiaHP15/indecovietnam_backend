@@ -4,7 +4,7 @@ import { successResponse, errorResponse, singleResponse } from "../utils/respons
 
 export const getAllMenus = async (req: Request, res: Response) => {
     try {
-        const results = await menuService.getAllMenus();
+        const results = await menuService.getAllMenus(req.query);
         successResponse(res, "Successfully fetched all menu ", results, { total: results.length, page: Number(req.query.page || 1), limit: Number(req.query.limit || 10) });
     } catch (error) {
         errorResponse(res, error);
