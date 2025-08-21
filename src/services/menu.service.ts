@@ -19,9 +19,6 @@ export const getAllMenus = async (query: QueryMenuDto): Promise<ResponseMenuDto[
 
   const [menus] = await menuRepo.findAndCount({
     where,
-    order: {
-      [query.sortBy || 'created_at']: query.order || 'desc',
-    },
     take: limit,
     skip
   });
