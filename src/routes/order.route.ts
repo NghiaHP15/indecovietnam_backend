@@ -6,13 +6,13 @@ import { handleValidationError } from "../middlewares/handleValidation.middlewar
 
 const router = Router();
 
-router.get("/", authMiddleware, orderController.getAllOrders);
-router.get("/:id", authMiddleware, orderController.getOrderById);
-router.get("/txnref/:txnRef", authMiddleware, orderController.getOrderByTxnRef);
-router.post("/", validateCreateOrder, handleValidationError, authMiddleware, orderController.createOrder);
+router.get("/", orderController.getAllOrders);
+router.get("/:id", orderController.getOrderById);
+router.get("/txnref/:txnRef", orderController.getOrderByTxnRef);
+router.post("/", validateCreateOrder, handleValidationError, orderController.createOrder);
 router.put("/retry/:id", orderController.retryPayment);
-router.put("/update/:id",  orderController.updateOrder);
-router.put("/cancel/:id",  orderController.cancelOrder);
+router.put("/update/:id", orderController.updateOrder);
+router.put("/cancel/:id", orderController.cancelOrder);
 router.get("/payment/ipn", orderController.ipnPayment);
 router.get("/momo/return", orderController.momoReturn);
 

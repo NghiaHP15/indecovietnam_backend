@@ -4,10 +4,10 @@ import { authMiddleware } from "../middlewares/authCutomer.middleware";
 
 const router = Router();
 
-router.get("/", authMiddleware, addressController.getAllAddresses);
-router.get("/:id",authMiddleware, addressController.getAddressById);
-router.post("/",authMiddleware, addressController.createAddress);
-router.put("/:id",authMiddleware, addressController.updateAddress);
-router.delete("/:id",authMiddleware, addressController.deleteAddress);
+router.get("/", addressController.getAllAddresses);
+router.get("/:id", addressController.getAddressById);
+router.post("/", addressController.createAddress);
+router.put("/:id", addressController.updateAddress);
+router.delete("/:id", addressController.deleteAddress);
 
 export default router;
