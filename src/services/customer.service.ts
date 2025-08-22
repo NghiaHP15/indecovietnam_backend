@@ -16,7 +16,7 @@ export const getAllCustomers = async (query: QueryCustomerDto): Promise<Response
 
     const [customers] = await customerRepo.findAndCount({ 
         where,
-        relations: ['addresses'],
+        relations: ['addresses', 'orders'],
         order: {
             [query.sortBy || 'created_at']: query.order || 'desc',
         },

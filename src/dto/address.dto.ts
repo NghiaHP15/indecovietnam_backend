@@ -55,6 +55,7 @@ export interface QueryAddressDto {
   page?: number;
   limit?: number;
   search?: string;
+  phone?: string;
   sortBy?: keyof Address;
   order?: 'asc' | 'desc';
 }

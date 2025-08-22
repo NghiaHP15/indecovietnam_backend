@@ -9,9 +9,7 @@ export const getAllAddresses = async (query: QueryAddressDto): Promise<ResponseA
 
     const where = query.search ? [
         { receiver_name: Like(`%${query.search}%`) },
-        { ward: Like(`%${query.search}%`) },
-        { district: Like(`%${query.search}%`) },
-        { city: Like(`%${query.search}%`) },
+        { phone: Like(`%${query.phone}%`) },
     ] : {};
 
     const [addresses] = await addressRepo.findAndCount({ 
