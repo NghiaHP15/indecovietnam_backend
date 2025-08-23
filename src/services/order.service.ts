@@ -12,11 +12,11 @@ export const getAllOrders = async (query: QueryOrderDto): Promise<ResponseOrderD
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
-    const where = query.search ? [
-        { code: Like(`%${query.search}%`) },
-        { status: query.status },
-        { customer: { id: query.customer } },
-    ] : {};
+    const where = {
+      ...(query.search ? { gmail: Like(`%${query.search}%`) } : {}),
+      ...(query.status ? { status: query.status } : {}),
+      ...(query.customer ? { customer: { id: query.customer } } : {}),
+    }
 
     const [orders] = await orderRepo.findAndCount({ 
         where,
