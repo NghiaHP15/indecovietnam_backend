@@ -110,6 +110,7 @@ export interface QueryOrderDto {
     page?: number;
     limit?: number;
     search?: string;
+    status?: OrderStatus;
     customer?: string;
     sortBy?: keyof Order;
     order?: 'asc' | 'desc';

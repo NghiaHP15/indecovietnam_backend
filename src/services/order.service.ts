@@ -14,6 +14,7 @@ export const getAllOrders = async (query: QueryOrderDto): Promise<ResponseOrderD
 
     const where = query.search ? [
         { code: Like(`%${query.search}%`) },
+        { status: query.status },
         { customer: { id: query.customer } },
     ] : {};
 
