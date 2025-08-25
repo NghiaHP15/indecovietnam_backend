@@ -1,4 +1,4 @@
-import { Like } from 'typeorm';
+import { ILike } from 'typeorm';
 import { productVariantRepo } from '../repositories/productVariant.repository';
 import { toResponseProductVariantDto } from '../automapper/productVariant.mapper';
 import { CreateProductVariantDto, ResponseProductVariantDto, UpdateProductVariantDto, QueryProductVariantDto } from './../dto/productVariant.dto';
@@ -9,9 +9,10 @@ export const getAllProductVariants = async (query: QueryProductVariantDto): Prom
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
-    const where = query.search ? [
-        { sku: Like(`%${query.search}%`) },
-    ] : {};
+    const where = {
+      ...(query.search ? { sku: ILike(`%${query.search}%`) } : {}),
+      ...(query.product ? { product: { id: query.product } } : {}),
+    };
 
     const [productVariants] = await productVariantRepo.findAndCount({ 
         where,

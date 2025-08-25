@@ -86,6 +86,7 @@ export interface QueryProductVariantDto {
   page?: number;
   limit?: number;
   search?: string;
+  product?: string;
   sortBy?: keyof ProductVariant;
   order?: 'asc' | 'desc';
 }
