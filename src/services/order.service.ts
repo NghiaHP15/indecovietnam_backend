@@ -1,4 +1,4 @@
-import { LessThan, Like } from "typeorm";
+import { LessThan, ILike } from "typeorm";
 import { CreateOrderDto, QueryOrderDto, ResponseOrderDto, UpdateOrderDto } from "../dto/order.dto";
 import { orderRepo } from "../repositories/order.repository";
 import { toResponseOrderDto } from "../automapper/order.mapper";
@@ -13,7 +13,7 @@ export const getAllOrders = async (query: QueryOrderDto): Promise<ResponseOrderD
     const skip = (page - 1) * limit;
 
     const where = {
-      ...(query.search ? { gmail: Like(`%${query.search}%`) } : {}),
+      ...(query.search ? { txnRef: ILike(`%${query.search}%`) } : {}),
       ...(query.status ? { status: query.status } : {}),
       ...(query.customer ? { customer: { id: query.customer } } : {}),
     }
