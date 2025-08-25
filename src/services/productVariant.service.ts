@@ -29,7 +29,7 @@ export const getAllProductVariants = async (query: QueryProductVariantDto): Prom
 export const getProductVariantById = async (id: string): Promise<ResponseProductVariantDto | null> => {
   const productVariant = await productVariantRepo.findOne({
     where: { id },
-    relations: ['product']
+    relations: ['product', 'color']
   });
   return productVariant ? toResponseProductVariantDto(productVariant) : null;
 };

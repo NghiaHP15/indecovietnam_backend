@@ -29,7 +29,6 @@ export const getOrderDetailById = async (id: string): Promise<ResponseOrderDetai
 };
 
 export const createOrderDetail = async (dto: CreateOrderDetailDto): Promise<ResponseOrderDetailDto> => {
-    dto.slug = dto.slug || generateSlug(dto.name);
     const orderDetail = orderDetailRepo.create({ ...dto });
     await orderDetailRepo.save(orderDetail);
     return toResponseOrderDetailDto(orderDetail);

@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Order } from "./Order";
 import { ProductVariant } from "./ProductVariant";
+import { generateSlug } from "../config/contant";
 
 @Entity()
 export class OrderDetail {
@@ -24,4 +25,10 @@ export class OrderDetail {
 
     @ManyToOne(() => ProductVariant, (variant) => variant.order_details)
     product_variant!: ProductVariant;
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    slugName() {
+        this.slug = generateSlug(this.name);
+    }
 }

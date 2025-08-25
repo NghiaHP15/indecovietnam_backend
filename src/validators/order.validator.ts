@@ -26,7 +26,11 @@ export const validateCreateOrder = [
     .notEmpty().withMessage("Product variant ID is required for each product.")
     .isUUID().withMessage("Product variant ID must be a valid UUID.")
     .custom(async (id: string) => {
+        console.log("Id validator", id);
+        
         const result = await productVariantService.getProductVariantById(id);
+        console.log(result);
+        
         if (!result) {
             throw new Error("Product variant not found.");
         }
