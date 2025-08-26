@@ -17,6 +17,7 @@ export const getAllEmployees = async (query: QueryEmployeeDto): Promise<Response
 
     const [employees] = await employeeRepo.findAndCount({ 
         where,
+        relations:['role'],
         order: {
             [query.sortBy || 'created_at']: query.order || 'desc',
         },
