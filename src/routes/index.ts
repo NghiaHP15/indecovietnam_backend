@@ -20,6 +20,7 @@ import feedbackRouter from "./feedback.route";
 import serviceRouter from "./service.route";
 import serviceCategoryRouter from "./serviceCategory.route";
 import uploadRouter from "./upload.router";
+import authEmployeeRouter from "./authEmployee.route"
 
 const routes = (app: Application): void => {
     app.use("/api/customer", customerRouter);
@@ -32,6 +33,7 @@ const routes = (app: Application): void => {
     app.use("/api/blog", blogRouter);
     app.use("/api/address", addressRouter);
     app.use("/api/employee", employeeRouter);
+    app.use("/api/employee", authEmployeeRouter);
     app.use("/api/role", roleRouter);
     app.use("/api/menu", menuRouter);
     app.use("/api/gallery", galleryRouter);

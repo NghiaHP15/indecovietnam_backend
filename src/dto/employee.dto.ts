@@ -58,6 +58,12 @@ export interface LoginEmployeeDto {
     password: string;
 }
 
+export interface ResetEmployeeDto {
+    email: string;
+    oldPassword: string;
+    newPassword: string;
+}
+
 export interface QueryEmployeeDto {
     page?: number;
     limit?: number;
