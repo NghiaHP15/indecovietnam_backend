@@ -1,6 +1,17 @@
 import { Employee } from "../entity/Employee";
 import { Gender, Position, Status_active } from "../utils/enum";
 
+export interface ResponseAuthDto {
+    id?: string;
+    email?: string;
+    fullname?: string;
+    phone?: string;
+    gender: Gender;
+    avatar?: string;
+    address?: string;
+    role?:string;
+}
+
 export interface ResponseEmployeeDto {
     id: string;
     email: string;

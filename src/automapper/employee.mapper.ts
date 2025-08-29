@@ -1,4 +1,5 @@
-import { ResponseEmployeeDto } from "../dto/employee.dto";
+import { toResponseAddressDto } from './address.mapper';
+import { ResponseAuthDto, ResponseEmployeeDto } from "../dto/employee.dto";
 import { Employee } from "../entity/Employee";
 
 export const toResponseEmployeeDto = (employee: Employee): ResponseEmployeeDto => {
@@ -16,5 +17,18 @@ export const toResponseEmployeeDto = (employee: Employee): ResponseEmployeeDto =
         role: employee.role && { id: employee.role.id, name: employee.role.name, permission: employee.role.permission },
         created_at: employee.created_at,
         updated_at: employee.updated_at
+    }
+}
+
+export const toResponseAuthDto = (employee: Employee): ResponseAuthDto => {
+    return {
+        id: employee.id,
+        email: employee.email,
+        fullname: employee.fullname,
+        phone: employee.phone,
+        gender: employee.gender,
+        avatar: employee.avatar,
+        address: employee.address,
+        role: employee.role && employee.role.permission
     }
 }

@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { LoginEmployeeDto, ResetEmployeeDto, ResponseEmployeeDto } from "../dto/employee.dto";
 import { Employee } from "../entity/Employee";
 import { generateRefreshToken } from "../utils/jwt";
-import { toResponseEmployeeDto } from "../automapper/employee.mapper";
+import { toResponseAuthDto } from "../automapper/employee.mapper";
 
 export const login = async (dto: LoginEmployeeDto) => {
     const employee = await employeeRepo.findOne({ 
@@ -15,7 +15,7 @@ export const login = async (dto: LoginEmployeeDto) => {
     const isValid = await bcrypt.compare(dto.password, employee.password_hash || "");
     if(!isValid) throw createError("Mật khẩu không chính xác", 401);
     const token = generateTokens(employee);
-    const user = toResponseEmployeeDto(employee);
+    const user = toResponseAuthDto(employee);
     return { ...token, user};
 }
 
