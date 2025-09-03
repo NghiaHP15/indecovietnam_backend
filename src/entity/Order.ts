@@ -1,10 +1,11 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { OrderStatus, PaymentMethod, PaymentStatus } from "../utils/enum";
 import { Customer } from "./Customer";
 import { OrderDetail } from "./OrderDetail";
 import { ProductRequest } from "./ProductRequest";
 import { Shipping } from "./Shipping";
 import { Address } from "./Address";
+import { Notification } from "./Notification";
 
 @Entity()
 export class Order {
@@ -52,4 +53,8 @@ export class Order {
 
     @OneToMany(() => Shipping, (shipping) => shipping.order)
     shippings!: Shipping[];
+
+    @OneToOne(() => Notification, (notification) => notification.order, { nullable: true })
+    @JoinColumn()
+    notification!: Notification;
 }

@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { TypeFeedback } from "../utils/enum";
+import { Notification } from "./Notification";
 
 @Entity()
 export class Feedback {
@@ -27,4 +28,7 @@ export class Feedback {
     created_at!: Date;
     @UpdateDateColumn()
     updated_at!: Date;
+    @OneToOne(() => Notification, (notification) => notification.contact, { nullable: true })
+    @JoinColumn()
+    notification!: Notification
 }

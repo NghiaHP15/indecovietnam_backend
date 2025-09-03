@@ -27,9 +27,11 @@ export const createFeedback = async (req: Request, res: Response) => {
     try {
         const result = await feedbackService.createFeedback(req.body);
         createNoti({
-            message: `Liên hệ mới từ ${result.name} - ${result.email}`,
+            message: `📞 Bạn có thông báo liên hệ mới`,
+            name: result.name,
+            avatar: result.avatar,
             type: TypeNotification.CONTACT,
-            contactId: result.id,
+            contact: { id: result.id },
         })
         return singleResponse(res, "Feedback created", result);
     } catch (error) {

@@ -64,9 +64,11 @@ export const createOrder = async (req: Request, res: Response) => {
                 return;
         }
         createNoti({
-            message: `Đơn hàng mới từ ${order.customer.firstname} ${order.customer.lastname} - ${order.customer.email}`,
+            message: `📦 Bạn có thông báo đơn hàng mới`,
             type: TypeNotification.ORDER,
-            orderId: order.id,
+            order: { id: order.id },
+            name: order.customer.firstname + ' ' + order.customer.lastname,
+            avatar: order.customer.avatar,
         })
         singleResponse(res, "Success", { paymentUrl: url });
     } catch (error) {

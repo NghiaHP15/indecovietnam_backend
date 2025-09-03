@@ -5,8 +5,23 @@ export interface ResponseNotificationDto {
     id: string;
     type: TypeNotification;
     message: string;
-    orderId?: string;
-    contactId?: string;
+    order: {
+        id: string;
+        tnxRef: string;
+        customer: {
+            id: string;
+            email: string;
+            firstname: string;
+            lastname: string;
+            avatar: string | undefined;
+        }
+    };
+    contact: {
+        id: string;
+        email: string;
+        name: string;
+        avatar: string | undefined;
+    }
     isRead: boolean;
     created_at: Date;
 }
@@ -15,16 +30,12 @@ export interface CreateNotificationDto {
     type: string;
     message: string;
     isRead: boolean;
-    orderId?: string;
-    contactId?: string;
-}
-
-export interface UpdateNotificationDto {
-    type: string;
-    message: string;
-    isRead: boolean;
-    orderId?: string;
-    contactId?: string;
+    order: {
+        id: string;
+    };
+    contact: {
+        id: string;
+    };
 }
 
 export interface QueryNotificationDto {

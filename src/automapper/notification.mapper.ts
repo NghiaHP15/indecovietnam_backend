@@ -7,8 +7,23 @@ export const toResponseNotificationDto = (noti: Notification): ResponseNotificat
         type: noti.type,
         message: noti.message,
         isRead: noti.isRead,
-        orderId: noti.orderId,
-        contactId: noti.contactId,
+        order: noti.order && {
+            id: noti.order.id,
+            tnxRef: noti.order.txnRef,
+            customer: {
+                id: noti.order.customer.id,
+                email: noti.order.customer.email,
+                firstname: noti.order.customer.firstname,
+                lastname: noti.order.customer.lastname,
+                avatar: noti.order.customer.avatar
+            }
+        },
+        contact: noti.order && {
+            id: noti.contact.id,
+            email: noti.contact.email,
+            name: noti.contact.name,
+            avatar: noti.contact.avatar
+        },
         created_at: noti.created_at
     }
 }

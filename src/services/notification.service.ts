@@ -7,9 +7,11 @@ import { broadcast } from "../websocket/ws-server";
 export const createNoti = async (noti: any): Promise<ResponseNotificationDto> => {
     const newNoti = await notificationRepo.save(noti);
     broadcast({
-      type: TypeNotification,
+      type: noti.type,
       id: newNoti.id,
       message: newNoti.message,
+      name: noti.name,
+      avatar: noti.avatar,
       orderId: newNoti.orderId,
       contactId: newNoti.contactId,
       isRead: newNoti.isRead,
@@ -35,6 +37,7 @@ export const getUnread = async (query: QueryNotificationDto): Promise<ResponseNo
     
     const [notifications] = await notificationRepo.findAndCount({
         where,
+        relations: ['order', 'contact'],
         order: {
             [query.sortBy || 'created_at']: query.order || 'desc',
         },

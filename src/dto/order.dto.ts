@@ -47,6 +47,7 @@ export interface ResponseOrderDto {
         email: string;
         firstname: string;
         lastname: string;
+        avatar: string | undefined;
     }
     products: OrderDetailDto[];
     created_at: Date;

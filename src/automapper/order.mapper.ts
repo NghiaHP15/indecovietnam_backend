@@ -24,7 +24,8 @@ export const toResponseOrderDto = (order: Order): ResponseOrderDto => {
             id: order.customer.id,
             email: order.customer.email,
             firstname: order.customer.firstname,
-            lastname: order.customer.lastname
+            lastname: order.customer.lastname,
+            avatar: order.customer.avatar
         },
         products: order.products.map(product => ({
             id: product.id,
