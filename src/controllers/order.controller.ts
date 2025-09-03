@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import * as orderService from "../services/order.service";
 import { successResponse, errorResponse, singleResponse } from "../utils/response";
-import { OrderStatus, PaymentMethod, PaymentStatus } from "../utils/enum";
+import { OrderStatus, PaymentMethod, PaymentStatus, TypeNotification } from "../utils/enum";
 import { VNPayService } from "../services/vnpay.service";
 import { BankPayService } from "../services/bankpay.service";
 import { MomoService } from "../services/momo.service";
 import { generateTxnRef, generateUUID } from "../config/contant";
 import { getClientIp } from "../utils/crypto.hepler";
+import { createNoti } from "../services/notification.service";
 
 export const getAllOrders = async (req: Request, res: Response) => {
     try {
@@ -62,6 +63,11 @@ export const createOrder = async (req: Request, res: Response) => {
                 res.status(400).json({ message: "Payment method not supported!" });
                 return;
         }
+        createNoti({
+            message: `Đơn hàng mới từ ${order.customer.firstname} ${order.customer.lastname} - ${order.customer.email}`,
+            type: TypeNotification.ORDER,
+            orderId: order.id,
+        })
         singleResponse(res, "Success", { paymentUrl: url });
     } catch (error) {
         errorResponse(res, error);

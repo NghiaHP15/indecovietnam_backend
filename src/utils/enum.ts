@@ -129,3 +129,10 @@ export enum TypeFeedback {
     FEEDBACK = 'feedback',
     OTHER = 'other'
 }
+
+export enum TypeNotification {
+    ORDER = 'order',
+    CONTACT = 'contact',
+    SALE = 'sale',
+    NEWS = 'news',
+}

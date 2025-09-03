@@ -21,6 +21,7 @@ import serviceRouter from "./service.route";
 import serviceCategoryRouter from "./serviceCategory.route";
 import uploadRouter from "./upload.router";
 import authEmployeeRouter from "./authEmployee.route"
+import notificationRouter from "./notification.route"
 
 const routes = (app: Application): void => {
     app.use("/api/customer", customerRouter);
@@ -44,6 +45,7 @@ const routes = (app: Application): void => {
     app.use("/api/service", serviceRouter);
     app.use("/api/service-category", serviceCategoryRouter);
     app.use("/api/upload", uploadRouter);
+    app.use("/api/ws", notificationRouter);
 }
 
 export default routes;

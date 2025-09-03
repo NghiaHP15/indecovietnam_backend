@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import * as feedbackService from "../services/feedback.service";
 import { successResponse, errorResponse, singleResponse, createError } from "../utils/response";
+import { createNoti } from "../services/notification.service";
+import { TypeNotification } from "../utils/enum";
 
 export const getAllfeedbacks = async (req: Request, res: Response) => {
     try {
@@ -24,6 +26,11 @@ export const getFeedbackById = async (req: Request, res: Response) => {
 export const createFeedback = async (req: Request, res: Response) => {
     try {
         const result = await feedbackService.createFeedback(req.body);
+        createNoti({
+            message: `Liên hệ mới từ ${result.name} - ${result.email}`,
+            type: TypeNotification.CONTACT,
+            contactId: result.id,
+        })
         return singleResponse(res, "Feedback created", result);
     } catch (error) {
         return errorResponse(res, error);
