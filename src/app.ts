@@ -4,14 +4,10 @@ import routes from "./routes";
 import corsMiddleware from "./middlewares/cors.middleware";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import http from "http";
 import "./workers/email.worker"; 
-import { initWebSocket } from "./websocket/ws-server";
 
 dotenv.config();
 const app = express();
-const server = http.createServer(app);
-initWebSocket(server);
 app.use(corsMiddleware)
 app.use(cookieParser());
 app.use(cors({

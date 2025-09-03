@@ -4,7 +4,9 @@ import type { Server as HttpServer } from "http";
 let wss: WebSocketServer | undefined;
 
 export const initWebSocket = (server: HttpServer) => {
+  console.log(server);
   wss = new WebSocketServer({ server });
+  
   console.log(wss);
 
   wss.on("connection", (ws: WebSocket) => {
