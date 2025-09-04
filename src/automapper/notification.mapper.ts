@@ -18,7 +18,7 @@ export const toResponseNotificationDto = (noti: Notification): ResponseNotificat
                 avatar: noti.order.customer.avatar
             }
         },
-        contact: noti.order && {
+        contact: noti.contact && {
             id: noti.contact.id,
             email: noti.contact.email,
             name: noti.contact.name,

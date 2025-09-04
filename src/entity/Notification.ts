@@ -15,10 +15,10 @@ export class Notification {
     isRead!: boolean;
     @CreateDateColumn()
     created_at!: Date;
-    @OneToOne(() => Order, (order) => order.notification, { nullable: true })
+    @OneToOne(() => Order, (order) => order.notification)
     @JoinColumn()
     order!: Order;
-    @OneToOne(() => Feedback, (feedback) => feedback.notification, { nullable: true })
+    @OneToOne(() => Feedback, (feedback) => feedback.notification)
     @JoinColumn()
     contact!: Feedback;
 }

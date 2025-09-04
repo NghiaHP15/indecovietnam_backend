@@ -28,7 +28,6 @@ export class Feedback {
     created_at!: Date;
     @UpdateDateColumn()
     updated_at!: Date;
-    @OneToOne(() => Notification, (notification) => notification.contact, { nullable: true })
-    @JoinColumn()
+    @OneToOne(() => Notification, (notification) => notification.contact)
     notification!: Notification
 }

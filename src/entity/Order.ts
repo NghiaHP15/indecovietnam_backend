@@ -54,7 +54,6 @@ export class Order {
     @OneToMany(() => Shipping, (shipping) => shipping.order)
     shippings!: Shipping[];
 
-    @OneToOne(() => Notification, (notification) => notification.order, { nullable: true })
-    @JoinColumn()
+    @OneToOne(() => Notification, (notification) => notification.order)
     notification!: Notification;
 }

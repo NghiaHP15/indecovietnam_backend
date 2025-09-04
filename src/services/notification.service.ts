@@ -5,7 +5,11 @@ import { TypeNotification } from "../utils/enum";
 import { broadcast } from "../websocket/ws-server";
 
 export const createNoti = async (noti: any): Promise<ResponseNotificationDto> => {
+    console.log(noti);
+    
     const newNoti = await notificationRepo.save(noti);
+    console.log(newNoti);
+    
     broadcast({
       type: noti.type,
       id: newNoti.id,
@@ -44,5 +48,7 @@ export const getUnread = async (query: QueryNotificationDto): Promise<ResponseNo
         take: limit,
         skip
     });
+    console.log(notifications);
+    
     return notifications.map(toResponseNotificationDto);
 }
