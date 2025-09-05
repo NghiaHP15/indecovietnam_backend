@@ -20,3 +20,12 @@ export const markAsRead = async (req: Request, res: Response) => {
         errorResponse(res, error);
     }
 }
+
+export const readAll = async (req: Request, res: Response) => {
+    try {
+        const results = await notificationService.readAll();
+        singleResponse(res, "Successfully fetched all menu ", results);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+}

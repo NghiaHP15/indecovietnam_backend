@@ -1,5 +1,6 @@
 import { toResponseNotificationDto } from "../automapper/notification.mapper";
 import { QueryNotificationDto, ResponseNotificationDto } from "../dto/notification.dto";
+import { Notification } from "../entity/Notification";
 import { notificationRepo } from "../repositories/notification.repository";
 import { TypeNotification } from "../utils/enum";
 import { broadcast } from "../websocket/ws-server";
@@ -8,8 +9,6 @@ export const createNoti = async (noti: any): Promise<ResponseNotificationDto> =>
     console.log(noti);
     
     const newNoti = await notificationRepo.save(noti);
-    console.log(newNoti);
-    
     broadcast({
       type: noti.type,
       id: newNoti.id,
@@ -31,6 +30,16 @@ export const markAsRead = async (id: string): Promise<ResponseNotificationDto | 
     return toResponseNotificationDto(noti);
 };
 
+
+export const readAll = async (): Promise<boolean> => {
+  await notificationRepo
+    .createQueryBuilder()
+    .update(Notification)
+    .set({ isRead: true })
+    .execute();
+  return true;
+};
+
 export const getUnread = async (query: QueryNotificationDto): Promise<ResponseNotificationDto[]> => {
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
@@ -41,14 +50,13 @@ export const getUnread = async (query: QueryNotificationDto): Promise<ResponseNo
     
     const [notifications] = await notificationRepo.findAndCount({
         where,
-        relations: ['order', 'contact'],
+        relations: ['order', 'contact', 'order.customer'],
         order: {
             [query.sortBy || 'created_at']: query.order || 'desc',
         },
         take: limit,
         skip
     });
-    console.log(notifications);
-    
     return notifications.map(toResponseNotificationDto);
 }
+
