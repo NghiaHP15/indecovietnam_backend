@@ -7,6 +7,7 @@ const router = Router();
 router.get("/image", uploadController.getImage);
 router.post("/image", upload.single("image"), uploadController.uploadImage);
 router.delete("/image", uploadController.deleteImage);
+router.delete("/image/delete-mutil", uploadController.deleteImageMulti);
 
 module.exports = router;
 

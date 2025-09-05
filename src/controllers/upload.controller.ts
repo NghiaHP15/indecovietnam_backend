@@ -3,11 +3,12 @@ import cloudinary from "../config/cloudinary.config";
 import fs from "fs";
 
 export const getImage = async (req: Request, res: Response) => {
+    const sort = req.query.sort;
     try {
         const { limit = 30 } = req.query;
         const result = await cloudinary.search
             .expression("folder:indecovietnam")
-            .sort_by("created_at", "desc")
+            .sort_by("created_at", sort === "asc" ? "asc" : "desc")
             .max_results(Number(limit))
             .execute();
         res.status(200).json({
@@ -76,6 +77,24 @@ export const deleteImage = async (req: Request, res: Response) => {
             return;
         }
         const result = await cloudinary.uploader.destroy(publicId as string);
+        res.status(200).json({
+            success: true,
+            data: result,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Delete failed",
+            error,
+        });
+    }
+}
+
+export const deleteImageMulti = async (req: Request, res: Response) => {
+    try {
+        const publicIds = req.body;
+        const result = await cloudinary.api.delete_resources(publicIds as string[]);
         res.status(200).json({
             success: true,
             data: result,
