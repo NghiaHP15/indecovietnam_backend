@@ -9,6 +9,7 @@ export interface ResponseAuthDto {
     gender: Gender;
     avatar?: string;
     address?: string;
+    position?: Position;
     role?:string;
 }
 

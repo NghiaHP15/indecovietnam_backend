@@ -29,6 +29,7 @@ export const toResponseAuthDto = (employee: Employee): ResponseAuthDto => {
         gender: employee.gender,
         avatar: employee.avatar,
         address: employee.address,
+        position: employee.position,
         role: employee.role && employee.role.permission
     }
 }
