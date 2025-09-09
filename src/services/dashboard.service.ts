@@ -251,22 +251,37 @@ export const getRevenueAndOrdersByMonth = async () => {
   const thisYearData = await orderRepo
     .createQueryBuilder("order")
     .select("EXTRACT(MONTH FROM order.created_at)", "month")
-    .addSelect("COALESCE(SUM(order.total_amount), 0)", "revenue")
-    .addSelect("COUNT(order.id)", "orders")
+    .addSelect(
+        "COALESCE(SUM(CASE WHEN order.status = :delivered THEN order.total_amount ELSE 0 END), 0)",
+        "revenue"
+    )
+    // Đếm số đơn CANCELLED
+    .addSelect(
+        "COALESCE(SUM(CASE WHEN order.status = :cancelled THEN order.total_amount ELSE 0 END), 0)",
+        "revenuecancelled"
+    )
     .where("EXTRACT(YEAR FROM order.created_at) = :thisYear", { thisYear })
-    .andWhere("order.status = :status", { status: OrderStatus.DELIVERED })
+    .setParameters({ delivered: OrderStatus.DELIVERED, cancelled: OrderStatus.CANCELLED })
     .groupBy("month")
+    .orderBy("month")
     .getRawMany();
 
   // Query năm ngoái
   const lastYearData = await orderRepo
     .createQueryBuilder("order")
     .select("EXTRACT(MONTH FROM order.created_at)", "month")
-    .addSelect("COALESCE(SUM(order.total_amount), 0)", "revenue")
-    .addSelect("COUNT(order.id)", "orders")
+    .addSelect(
+        "COALESCE(SUM(CASE WHEN order.status = :delivered THEN order.total_amount ELSE 0 END), 0)",
+        "revenue"
+    )
+    .addSelect(
+        "COALESCE(SUM(CASE WHEN order.status = :cancelled THEN order.total_amount ELSE 0 END), 0)",
+        "revenuecancelled"
+    )
     .where("EXTRACT(YEAR FROM order.created_at) = :lastYear", { lastYear })
-    .andWhere("order.status = :status", { status: OrderStatus.DELIVERED })
+    .setParameters({ delivered: OrderStatus.DELIVERED, cancelled: OrderStatus.CANCELLED })
     .groupBy("month")
+    .orderBy("month")
     .getRawMany();
 
   // Tạo mảng 12 tháng mặc định
@@ -278,7 +293,7 @@ export const getRevenueAndOrdersByMonth = async () => {
   thisYearData.forEach((row) => {
     const monthIndex = Number(row.month) - 1;
     revenueThisYear[monthIndex] = Number(row.revenue);
-    ordersThisYear[monthIndex] = Number(row.orders);
+    ordersThisYear[monthIndex] = Number(row.revenuecancelled);
   });
 
   // Fill dữ liệu năm ngoái
@@ -292,12 +307,12 @@ export const getRevenueAndOrdersByMonth = async () => {
 
   return {
     [thisYear]: [
-      { name: "price", data: revenueThisYear },
-      { name: "order", data: ordersThisYear },
+      { name: "Tổng giá bán", data: revenueThisYear },
+      { name: "Tổng giá hủy", data: ordersThisYear },
     ],
     [lastYear]: [
-      { name: "price", data: revenueLastYear },
-      { name: "order", data: ordersLastYear },
+      { name: "Tổng giá bán", data: revenueLastYear },
+      { name: "Tổng giá hủy", data: ordersLastYear },
     ],
   };
 };
