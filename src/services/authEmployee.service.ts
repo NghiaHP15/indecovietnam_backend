@@ -20,7 +20,6 @@ export const login = async (dto: LoginEmployeeDto) => {
 }
 
 export const resetPassword = async (dto: ResetEmployeeDto) => {
-
     const employee = await employeeRepo.findOneBy({ email: dto.email });
     if (!employee) throw createError("Email không tồn tại", 401);
     const isValid = await bcrypt.compare(dto.oldPassword, employee.password_hash || "");
