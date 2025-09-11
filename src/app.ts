@@ -10,6 +10,7 @@ dotenv.config();
 const app = express();
 app.use(corsMiddleware)
 app.use(cookieParser());
+
 // app.use(cors({
 //   origin: [
 //     process.env.CLIENT_URL || "http://localhost:3000",
@@ -18,12 +19,25 @@ app.use(cookieParser());
 //   credentials: true,               // nếu dùng cookie / axios withCredentials
 // }));
 
-app.use(cors({
-  origin: (origin, callback) => {
-    callback(null, true); // cho phép tất cả
-  },
-  credentials: true, // cần cho cookie / Authorization header
-}));
+const allowedOrigins = [
+  "http://localhost:3000", // client dev
+  "http://localhost:3001", // admin dev
+  process.env.CLIENT_URL, // client prod
+  process.env.ADMIN_URL,  // admin prod
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // Cho phép Postman, curl, v.v.
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, origin); // ✅ Trả đúng origin request
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true, // nếu dùng cookie/authorization header
+  })
+);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
