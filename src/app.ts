@@ -33,7 +33,7 @@ app.use(
       if (allowedOrigins.includes(origin)) {
         return callback(null, origin); // ✅ Trả đúng origin request
       }
-      return callback(new Error("Not allowed by CORS"));
+      callback(new Error("Not allowed by CORS"));
     },
     credentials: true, // nếu dùng cookie/authorization header
   })
