@@ -6,20 +6,20 @@ import { TypeNotification } from "../utils/enum";
 import { broadcast } from "../websocket/ws-server";
 
 export const createNoti = async (noti: any): Promise<ResponseNotificationDto> => {
-    console.log(noti);
     
     const newNoti = await notificationRepo.save(noti);
+    
     broadcast({
       type: noti.type,
       id: newNoti.id,
       message: newNoti.message,
       name: noti.name,
       avatar: noti.avatar,
-      orderId: newNoti.orderId,
-      contactId: newNoti.contactId,
+      orderId: newNoti?.order?.id || "",
+      contactId: newNoti?.contact?.id || "",
       isRead: newNoti.isRead,
     });
-    return toResponseNotificationDto(newNoti);
+    return newNoti;
 }
 
 export const markAsRead = async (id: string): Promise<ResponseNotificationDto | null> => {

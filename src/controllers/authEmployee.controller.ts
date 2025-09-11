@@ -4,6 +4,8 @@ import * as authService from "../services/authEmployee.service";
 import { errorResponse, singleResponse } from "../utils/response";
 
 export const login = async (req: Request, res: Response) => {
+  console.log(res);
+  
   try {
     const dto: LoginEmployeeDto = req.body;
     const result = await authService.login(dto);

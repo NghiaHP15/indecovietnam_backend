@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as orderService from "../services/order.service";
+import * as customerService from "../services/customer.service";
 import { successResponse, errorResponse, singleResponse } from "../utils/response";
 import { OrderStatus, PaymentMethod, PaymentStatus, TypeNotification } from "../utils/enum";
 import { VNPayService } from "../services/vnpay.service";
@@ -47,6 +48,7 @@ export const createOrder = async (req: Request, res: Response) => {
     // 🔹 Lưu đơn hàng trước khi tạo UR
     
     try {
+        const exisCustomer = await customerService.getCustomerById(customer.id);
         const order = await orderService.createOrder({total_amount, txnRef, ...req.body});
         let url: string;
         switch (paymentmethod) {
@@ -63,12 +65,13 @@ export const createOrder = async (req: Request, res: Response) => {
                 res.status(400).json({ message: "Payment method not supported!" });
                 return;
         }
+        
         createNoti({
             message: `📦 Bạn có thông báo đơn hàng mới`,
             type: TypeNotification.ORDER,
             order: { id: order.id },
-            name: order.customer.firstname + ' ' + order.customer.lastname,
-            avatar: order.customer.avatar,
+            name: exisCustomer?.firstname + ' ' + exisCustomer?.lastname,
+            avatar: exisCustomer?.avatar,
         })
         singleResponse(res, "Success", { paymentUrl: url });
     } catch (error) {
