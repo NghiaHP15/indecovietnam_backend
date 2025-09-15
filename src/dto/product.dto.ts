@@ -10,6 +10,7 @@ export interface ResponseProductDto {
     description?: string;
     status: StatusProduct;
     featured: boolean;
+    views: number;
     max_price: number;
     min_price: number;
     body?: string;

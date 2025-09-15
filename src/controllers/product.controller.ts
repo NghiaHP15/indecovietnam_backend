@@ -59,3 +59,13 @@ export const deleteProduct = async (req: Request, res: Response) => {
         errorResponse(res, error);
     }
 }
+
+export const viewProduct = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    try {
+        const result = await productService.viewProduct(id);
+        singleResponse(res, "Product viewed", result);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+}

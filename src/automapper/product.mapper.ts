@@ -10,6 +10,7 @@ export const toResponseProductDto = (product: Product): ResponseProductDto => {
         description: product.description,
         status: product.status,
         featured: product.featured,
+        views: product.views,
         max_price: product.max_price,
         min_price: product.min_price,
         body: product.body,

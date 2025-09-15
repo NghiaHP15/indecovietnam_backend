@@ -128,6 +128,14 @@ export const deleteProduct = async (id: string): Promise<boolean> => {
   return result.affected !== 0; // Trả về true nếu có bản ghi bị xóa
 };
 
+export const viewProduct = async (id: string): Promise<boolean> => {
+  const product = await productRepo.findOne({ where: { id } });
+  if (!product) return false;
+  product.views += 2;
+  await productRepo.save(product);
+  return true;
+}
+
 
 export const updateProductMinMaxPrice = async (id: string) => {
   const variants = await productVariantRepo.find({

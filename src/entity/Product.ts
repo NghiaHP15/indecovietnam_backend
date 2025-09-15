@@ -34,6 +34,9 @@ export class Product {
     @Column({ type: 'boolean', default: false })
     featured!: boolean;
 
+    @Column({ type: 'int', default: 0 })
+    views!: number;
+
     @Column({ type: 'float', default: 0 })
     min_price!: number;
 
