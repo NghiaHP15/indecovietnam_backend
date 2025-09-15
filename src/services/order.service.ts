@@ -161,16 +161,12 @@ export const updateOrder = async (id: string, dto: UpdateOrderDto): Promise<Resp
 
 export const cancelOrder = async (id: string): Promise<boolean> => {
   const order = await getOrderById(id);
-  console.log(id);
-  console.log(order);
   
   if (!order) return false;
-  console.log(order);
   const isPendingUnpaid = order.status === OrderStatus.PENDING && [PaymentStatus.PENDING, PaymentStatus.FAILED].includes(order.payment_status);
   if(!isPendingUnpaid) {
     throw new Error("Cannot delete order that is not pending or has been paid.");
   }
-  console.log(isPendingUnpaid);
   
   await Promise.all(
     order.products.map(item =>
@@ -179,7 +175,6 @@ export const cancelOrder = async (id: string): Promise<boolean> => {
   );
   order.status = OrderStatus.CANCELLED;
   order.payment_status = PaymentStatus.CANCELLED;
-  console.log(order);
   
   await orderRepo.save(order);
   return true;
@@ -195,6 +190,45 @@ export const canCreateOrder = async (dto: CreateOrderDto): Promise<boolean> => {
   })
   return count < 3;
 }
+
+export const getSearchOrders = async (query: any): Promise<ResponseOrderDto[]> => {
+  const { page = 1, limit = 10, type, value, sortBy, order } = query;
+  const skip = (page - 1) * limit;
+
+  let where: any = {};
+
+  if (type && value) {
+    if (type === "email") {
+      where = { customer: { email: value } };
+    } else if (type === "phone") {
+      where = { address: { phone: value } };
+    }
+  } else if (value) {
+    // nếu không có type thì tìm theo email OR phone
+    where = [
+      { customer: { email: value } },
+      { address: { phone: value } },
+    ];
+  }
+
+  const [orders] = await orderRepo.findAndCount({
+    where,
+    relations: [
+      "customer",
+      "products",
+      "address",
+      "products.product_variant",
+      "products.product_variant.color",
+    ],
+    order: {
+      [sortBy || "created_at"]: order || "desc",
+    },
+    take: limit,
+    skip,
+  });
+
+  return orders.map(toResponseOrderDto);
+};
 
 export const autoCancelOrders = async (): Promise<void> => {
   const orders = await orderRepo.find({

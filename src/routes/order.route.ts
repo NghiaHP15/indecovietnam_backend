@@ -15,5 +15,6 @@ router.put("/update/:id", orderController.updateOrder);
 router.put("/cancel/:id", orderController.cancelOrder);
 router.get("/payment/ipn", orderController.ipnPayment);
 router.get("/momo/return", orderController.momoReturn);
+router.get("/search/order", orderController.getSearchOrders);
 
 export default router;

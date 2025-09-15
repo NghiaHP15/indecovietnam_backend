@@ -129,11 +129,19 @@ export const updateOrder = async (req: Request, res: Response) => {
 
 export const cancelOrder = async (req: Request, res: Response) => {
     const id = req.params.id;
-    console.log(id);
     try {
         let result: boolean = false;
         result = await orderService.cancelOrder(id);
         singleResponse(res, "Order deleted", result);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+}
+
+export const getSearchOrders = async (req: Request, res: Response) => {
+    try {
+        const results = await orderService.getSearchOrders(req.query);
+        successResponse(res, "Successfully fetched all order ", results, { total: results.length, page: Number(req.query.page || 1), limit: Number(req.query.limit || 10) });
     } catch (error) {
         errorResponse(res, error);
     }
