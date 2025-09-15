@@ -31,6 +31,7 @@ import { Feedback } from '../entity/Feedback';
 import { Service } from '../entity/Service';
 import { ServiceCategory } from '../entity/ServiceCategory';
 import { Notification } from '../entity/Notification';
+import { Policy } from '../entity/Policy';
 import "reflect-metadata";
 import "dotenv/config";
 
@@ -41,7 +42,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [Address, Blog, BlogCategory, Customer, Employee, Factory, InventoryItem, Menu, Order, OrderDetail, Product, ProductBatche, ProductCategory, RoomCategory, ProductRequest, ProductVariant, QaulityCheck, Role, ShipmentDetail, Shipper, Shipping, SiteSetting, Staticspage, Warehouse, WarehouseImport, RefreshToken, Gallery, Color, Feedback, Service, ServiceCategory, Notification],
+  entities: [Address, Blog, BlogCategory, Customer, Employee, Factory, InventoryItem, Menu, Order, OrderDetail, Product, ProductBatche, ProductCategory, RoomCategory, ProductRequest, ProductVariant, QaulityCheck, Role, ShipmentDetail, Shipper, Shipping, SiteSetting, Staticspage, Warehouse, WarehouseImport, RefreshToken, Gallery, Color, Feedback, Service, ServiceCategory, Notification, Policy],
   synchronize: true,
   logging: false,
 });

@@ -23,6 +23,7 @@ import uploadRouter from "./upload.router";
 import authEmployeeRouter from "./authEmployee.route"
 import notificationRouter from "./notification.route"
 import dashboardRouter from "./dashboard.router";
+import policyRouter from "./policy.route";
 
 
 const routes = (app: Application): void => {
@@ -49,6 +50,7 @@ const routes = (app: Application): void => {
     app.use("/api/upload", uploadRouter);
     app.use("/api/ws", notificationRouter);
     app.use("/api/dashboard", dashboardRouter);
+    app.use("/api/policy", policyRouter);
 }
 
 export default routes;
