@@ -57,6 +57,8 @@ export interface QueryProductDto {
     search?: string;
     status?: StatusProduct;
     productCategory?: string;
+    room?: string;
+    category?: string;
     featured?: boolean;
     sortBy?: keyof Product;
     order?: 'asc' | 'desc';

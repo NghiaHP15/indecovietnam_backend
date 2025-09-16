@@ -10,7 +10,7 @@ export const getAllProducts = async (query: QueryProductDto): Promise<ResponsePr
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
-    const where = {
+    const where: any = {
         ...(query.search ? { 
           name_normalized: Raw(alias => `${alias} LIKE :search`, {
             search: `%${generateNormalized(query.search).toLowerCase()}%`
@@ -18,8 +18,38 @@ export const getAllProducts = async (query: QueryProductDto): Promise<ResponsePr
         } : {}),
         ...(query.status ? { status: query.status } : {}),
         ...(query.featured ? { featured: query.featured } : {}),
-        ...(query.productCategory ? { productCategory: { id: query.productCategory } } : {}),
+        // ...(query.productCategory ? { productCategory: { id: query.productCategory } } : {}),
+        // ...(query.category ? { productCategory: { slug: query.category } } : {}),
+        // ...(query.room ? { productCategory: { roomCategory: { slug: query.room } } } : {}),
     };
+
+    // Khởi tạo điều kiện productCategory + room
+    if (query.room) {
+      // nếu có room, ưu tiên lọc room trước
+      where.productCategory = {
+        roomCategory: { slug: query.room }
+      };
+
+      if (query.category) {
+        // nếu có category sau khi đã có room, thêm slug cho productCategory
+        where.productCategory.slug = query.category;
+      }
+
+    } else if (query.category) {
+      // nếu không có room nhưng có category
+      where.productCategory = {
+        slug: query.category
+      };
+    }
+
+    // Nếu còn filter bằng id của productCategory riêng (nếu bạn muốn)
+    if (query.productCategory) {
+      // nếu vừa có room & category & productCategory thì phụ thêm id
+      if (!where.productCategory) {
+        where.productCategory = {};
+      }
+      where.productCategory.id = query.productCategory;
+    }
 
     const [products] = await productRepo.findAndCount({ 
         where,
