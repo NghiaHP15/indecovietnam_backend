@@ -22,6 +22,16 @@ export const getPolicyById = async (req: Request, res: Response) => {
     }
 }
 
+export const getPolicyBySlug = async (req: Request, res: Response) => {
+    const slug = req.params.slug;
+    try {
+        const result = await policyService.getPolicyBySlug(slug);
+        singleResponse(res, "Policy found", result);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+}
+
 export const createPolicy = async (req: Request, res: Response) => {
     try {
         const result = await policyService.createPolicy(req.body);

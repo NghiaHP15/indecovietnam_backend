@@ -35,6 +35,13 @@ export const getPolicyById = async (id: string): Promise<ResponsePolicyDto | nul
   return policy ? toResponsePolicyDto(policy) : null;
 };
 
+export const getPolicyBySlug = async (slug: string): Promise<ResponsePolicyDto | null> => {
+  const policy = await policyRepo.findOne({ 
+    where: { slug },
+  });
+  return policy ? toResponsePolicyDto(policy) : null;
+};
+
 export const createPolicy = async (dto: CreatePolicyDto): Promise<ResponsePolicyDto> => {
   const policy = policyRepo.create({ ...dto });
   await policyRepo.save(policy);
