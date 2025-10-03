@@ -2,13 +2,14 @@ import { Router } from "express";
 import * as feedbackController from "../controllers/feedback.controller";
 import { validateFeeback } from "../validators/feedback.validators";
 import { handleValidationError } from "../middlewares/handleValidation.middleware";
+import { authMiddleware } from "../middlewares/authCutomer.middleware";
 
 const router = Router();
 
 router.get("/", feedbackController.getAllfeedbacks);
 router.get("/:id", feedbackController.getFeedbackById);
 router.post("/", validateFeeback, handleValidationError, feedbackController.createFeedback);
-router.put("/:id", feedbackController.updateFeedback);
-router.delete("/:id", feedbackController.deleteFeedback);
+router.put("/:id", authMiddleware, feedbackController.updateFeedback);
+router.delete("/:id", authMiddleware, feedbackController.deleteFeedback);
 
 export default router;

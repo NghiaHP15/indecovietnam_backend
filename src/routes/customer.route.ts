@@ -7,8 +7,8 @@ const router = Router();
 router.get("/", customerController.getAllCustomers);
 router.get("/:id", customerController.getCustomerById);
 router.get("/email/:email", authMiddleware, customerController.getCustomerByEmail);
-router.post("/", customerController.createCustomer);
-router.put("/:id", customerController.updateCustomer);
-router.delete("/:id", customerController.deleteCustomer);
+router.post("/", authMiddleware, customerController.createCustomer);
+router.put("/:id", authMiddleware, customerController.updateCustomer);
+router.delete("/:id", authMiddleware, customerController.deleteCustomer);
 
 export default router;

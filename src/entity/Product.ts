@@ -46,6 +46,9 @@ export class Product {
     @Column({type: 'text', nullable: true})
     body?: string;
 
+    @Column({type: 'text', nullable: true})
+    policy?: string;
+
     @CreateDateColumn()
     created_at?: Date;
 

@@ -14,6 +14,7 @@ export interface ResponseProductDto {
     max_price: number;
     min_price: number;
     body?: string;
+    policy?: string;
     productCategory: {
         id: string;
         title: string;
@@ -35,6 +36,7 @@ export interface CreateProductDto {
     status: StatusProduct;
     featured: boolean;
     body?: string;
+    policy?: string;
     productCategory: { id: string };
     variants?: CreateProductVariantDto[];
 }
@@ -47,6 +49,7 @@ export interface UpdateProductDto {
     status: StatusProduct;
     featured: boolean;
     body?: string;
+    policy?: string;
     productCategory: { id: string };
     variants?: UpdateProductVariantDto[];
 }

@@ -14,6 +14,7 @@ export const toResponseProductDto = (product: Product): ResponseProductDto => {
         max_price: product.max_price,
         min_price: product.min_price,
         body: product.body,
+        policy: product.policy,
         productCategory: {
             id: product.productCategory.id,
             title: product.productCategory.title,
