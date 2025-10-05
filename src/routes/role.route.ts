@@ -1,13 +1,13 @@
 import { Router } from "express";
 import * as roleController from "../controllers/role.controller";
-import { authMiddleware } from "../middlewares/authCutomer.middleware";
+import { authAdminMiddleware } from "../middlewares/authAdmin.middleware";
 
 const router = Router();
 
-router.get("/", roleController.getAllRoles);
-router.get("/:id", roleController.getRoleById);
-router.post("/", authMiddleware, roleController.createRole);
-router.put("/:id", authMiddleware, roleController.updateRole);
-router.delete("/:id", authMiddleware, roleController.deleteRole);
+router.get("/", authAdminMiddleware, roleController.getAllRoles);
+router.get("/:id", authAdminMiddleware, roleController.getRoleById);
+router.post("/", authAdminMiddleware, roleController.createRole);
+router.put("/:id", authAdminMiddleware, roleController.updateRole);
+router.delete("/:id", authAdminMiddleware, roleController.deleteRole);
 
 export default router;

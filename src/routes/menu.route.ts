@@ -1,13 +1,13 @@
 import { Router } from "express";
 import * as menuController from "../controllers/menu.controller";
-import { authMiddleware } from "../middlewares/authCutomer.middleware";
+import { authAdminMiddleware } from "../middlewares/authAdmin.middleware";
 
 const router = Router();
 
 router.get("/", menuController.getAllMenus);
 router.get("/:id", menuController.getMenuById);
-router.post("/", authMiddleware, menuController.createMenu);
-router.put("/:id", authMiddleware, menuController.updateMenu);
-router.delete("/:id", authMiddleware, menuController.deleteMenu);
+router.post("/", authAdminMiddleware, menuController.createMenu);
+router.put("/:id", authAdminMiddleware, menuController.updateMenu);
+router.delete("/:id", authAdminMiddleware, menuController.deleteMenu);
 
 export default router;

@@ -1,14 +1,14 @@
 import { Router } from "express";
 import * as policyController from "../controllers/policy.controller";
-import { authMiddleware } from "../middlewares/authCutomer.middleware";
+import { authAdminMiddleware } from "../middlewares/authAdmin.middleware";
 
 const router = Router();
 
 router.get("/", policyController.getAllPolicies);
 router.get("/:id", policyController.getPolicyById);
-router.post("/", authMiddleware, policyController.createPolicy);
-router.put("/:id", authMiddleware, policyController.updatePolicy);
-router.delete("/:id", authMiddleware, policyController.deletePolicy);
 router.get("/slug/:slug", policyController.getPolicyBySlug);
+router.post("/", authAdminMiddleware, policyController.createPolicy);
+router.put("/:id", authAdminMiddleware, policyController.updatePolicy);
+router.delete("/:id", authAdminMiddleware, policyController.deletePolicy);
 
 export default router;

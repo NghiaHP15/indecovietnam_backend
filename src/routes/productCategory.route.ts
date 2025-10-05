@@ -1,13 +1,13 @@
 import { Router } from "express";
 import * as productCategoryController from "../controllers/productCategory.controller";
-import { authMiddleware } from "../middlewares/authCutomer.middleware";
+import { authAdminMiddleware } from "../middlewares/authAdmin.middleware";
 
 const router = Router();
 
 router.get("/", productCategoryController.getAllProductCategories);
 router.get("/:id", productCategoryController.getProductCategoryById);
-router.post("/", authMiddleware, productCategoryController.createProductCategory);
-router.put("/:id", authMiddleware, productCategoryController.updateProductCategory);
-router.delete("/:id", authMiddleware, productCategoryController.deleteProductCategory);
+router.post("/", authAdminMiddleware, productCategoryController.createProductCategory);
+router.put("/:id", authAdminMiddleware, productCategoryController.updateProductCategory);
+router.delete("/:id", authAdminMiddleware, productCategoryController.deleteProductCategory);
 
 export default router;

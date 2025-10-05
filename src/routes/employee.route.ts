@@ -1,14 +1,14 @@
 import { Router } from "express";
 import * as employeeController from "../controllers/employee.controller";
-import { authMiddleware } from "../middlewares/authCutomer.middleware";
+import { authAdminMiddleware } from "../middlewares/authAdmin.middleware";
 
 const router = Router();
 
-router.get("/", employeeController.getAllEmployees);
-router.get("/:id", employeeController.getEmployeeById);
+router.get("/", authAdminMiddleware, employeeController.getAllEmployees);
+router.get("/:id", authAdminMiddleware, employeeController.getEmployeeById);
 router.get("/email/:email", employeeController.getEmployeeByEmail);
-router.post("/", authMiddleware, employeeController.createEmployee);
-router.put("/:id", authMiddleware, employeeController.updateEmployee);
-router.delete("/:id", authMiddleware, employeeController.deleteEmployee);
+router.post("/", authAdminMiddleware, employeeController.createEmployee);
+router.put("/:id", authAdminMiddleware, employeeController.updateEmployee);
+router.delete("/:id", authAdminMiddleware, employeeController.deleteEmployee);
 
 export default router;

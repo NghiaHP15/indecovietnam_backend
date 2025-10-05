@@ -1,11 +1,9 @@
 import { RequestHandler } from "express";
-import { verifyAccessToken } from "../utils/jwt";
+import { verifyAccessToken, verifyRefreshToken } from "../utils/jwt";
 
-export const authCustomerMiddleware: RequestHandler = (req, res, next) => {
+export const authAdminMiddleware: RequestHandler = (req, res, next) => {
 
   const authHeader = req.headers["authorization"];
-  console.log(authHeader);
-  
   const token = authHeader?.split(" ")[1];
 
   if (!token) {
@@ -14,7 +12,7 @@ export const authCustomerMiddleware: RequestHandler = (req, res, next) => {
   }
 
   try {
-    const decoded = verifyAccessToken(token);
+    const decoded = verifyRefreshToken(token);
     (req as any).user = decoded;
     next();
   } catch {

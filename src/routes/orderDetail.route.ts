@@ -1,13 +1,13 @@
 import { Router } from "express";
 import * as orderDetailController from "../controllers/orderDetail.controller";
-import { authMiddleware } from "../middlewares/authCutomer.middleware";
+import { authAdminMiddleware } from "../middlewares/authAdmin.middleware";
 
 const router = Router();
 
-router.get("/", orderDetailController.getAllOrderDetails);
-router.get("/:id", orderDetailController.getOrderDetailById);
-router.post("/", authMiddleware, orderDetailController.createOrderDetail);
-router.put("/:id", authMiddleware, orderDetailController.updateOrderDetail);
-router.delete("/:id", authMiddleware, orderDetailController.deleteOrderDetail);
+router.get("/", authAdminMiddleware, orderDetailController.getAllOrderDetails);
+router.get("/:id", authAdminMiddleware, orderDetailController.getOrderDetailById);
+router.post("/", authAdminMiddleware, orderDetailController.createOrderDetail);
+router.put("/:id", authAdminMiddleware, orderDetailController.updateOrderDetail);
+router.delete("/:id", authAdminMiddleware, orderDetailController.deleteOrderDetail);
 
 export default router;

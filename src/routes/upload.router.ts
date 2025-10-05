@@ -1,14 +1,14 @@
 import { Router } from "express";
 import upload from "../config/multer.config";
 import * as uploadController from "../controllers/upload.controller";
-import { authMiddleware } from "../middlewares/authCutomer.middleware";
+import { authAdminMiddleware } from "../middlewares/authAdmin.middleware";
 
 const router = Router();
 
 router.get("/image", uploadController.getImage);
-router.post("/image", authMiddleware, upload.single("image"), uploadController.uploadImage);
-router.delete("/image", authMiddleware, uploadController.deleteImage);
-router.delete("/image/delete-multi", authMiddleware, uploadController.deleteImageMulti);
+router.post("/image", authAdminMiddleware, upload.single("image"), uploadController.uploadImage);
+router.delete("/image", authAdminMiddleware, uploadController.deleteImage);
+router.delete("/image/delete-multi", authAdminMiddleware, uploadController.deleteImageMulti);
 
 module.exports = router;
 

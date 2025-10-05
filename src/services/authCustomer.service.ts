@@ -46,7 +46,7 @@ export const login = async (dto: LoginCustomerDto) => {
         customer
     })
     await refreshTokenRepo.save(refreshToken);
-    const user= generateUser(customer);
+    const user = generateUser(customer);
     return { ...tokens, user};
 }
 

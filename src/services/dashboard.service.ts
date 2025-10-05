@@ -238,6 +238,7 @@ export const getTopProduts = async (limit: number): Promise<any> => {
         size: item.size,
         image: item.image,
         price: item.price,
+        quantity_selled: item.quantity_selled,
         product: { name: item.product.name, },
     }));
 }
