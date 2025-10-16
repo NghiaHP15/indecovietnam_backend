@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import * as authService from "../services/authCustomer.service";
 import { errorResponse, singleResponse } from "../utils/response";
 import { LoginCustomerDto, RegisterCustomerDto, SocialLoginCustomerDto } from "../dto/customer.dto";
-// import { emailQueue } from "../queues/email.queue";
-import { EmailJobType } from "../types/email";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -17,7 +15,6 @@ export const register = async (req: Request, res: Response) => {
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     })
-    // emailQueue.add({ to: user.email, payload: user, type: EmailJobType.WELCOME });
     singleResponse(res,"Register success", { accessToken, user });
   } catch (err: any) {
     errorResponse(res, err);

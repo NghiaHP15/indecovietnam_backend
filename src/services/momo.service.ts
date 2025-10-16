@@ -4,7 +4,7 @@ import { orderRepo } from "../repositories/order.repository";
 import * as productVariantService from "./productVariant.service";
 import * as orderService from "./order.service";
 import { PaymentStatus } from "../utils/enum";
-// import { emailQueue } from "../queues/email.queue";
+import { emailQueue } from "../queues/email.queue";
 import { EmailJobType } from "../types/email";
 
 const momoConfig = {
@@ -75,7 +75,7 @@ export const MomoService = {
                         productVariantService.confirm(item.product_variant.id, item.quantity)
                     )
                 )
-                // emailQueue.add({ to: order.customer.email, payload: order, type: EmailJobType.CONFIRM_ORDER });
+                emailQueue.add({ to: order.customer.email, payload: order, type: EmailJobType.CONFIRM_ORDER });
             }
         }
 
